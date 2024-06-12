@@ -2,7 +2,7 @@ import sys
 import os
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(current_path + "/../../models/quantum/alpha/module/")
+sys.path.append(current_path + "/../../models/quantum/beta_2_3/")
 import argparse
 
 import json
@@ -14,7 +14,7 @@ import torch
 import time
 import git
 
-from alpha_3_multiclass_trainer import Alpha_3_multiclass_trainer
+from beta_3_trainer import Beta_3_trainer
 from save_json_output import JsonOutputer
 
 
@@ -104,7 +104,7 @@ def main(args):
     random.seed(args.seed)
     seed_list = random.sample(range(1, int(2**32 - 1)), int(args.runs))
 
-    model_name = "alpha_3_multiclass"
+    model_name = "beta_3"
 
     all_training_loss_list = []
     all_training_acc_list = []
@@ -132,7 +132,7 @@ def main(args):
         print("-----------------------------------")
         print("\n")
 
-        trainer = Alpha_3_multiclass_trainer(
+        trainer = Beta_3_trainer(
             args.optimiser,
             i,
             args.iterations,

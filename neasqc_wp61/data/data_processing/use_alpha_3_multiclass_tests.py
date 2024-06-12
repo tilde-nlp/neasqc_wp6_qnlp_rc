@@ -14,7 +14,7 @@ import torch
 import time
 import git
 
-from alpha_3_multiclass_trainer import Alpha_3_multiclass_trainer
+from alpha_3_multiclass_trainer_tests import Alpha_3_multiclass_trainer_tests
 from save_json_output import JsonOutputer
 
 
@@ -22,9 +22,6 @@ parser = argparse.ArgumentParser()
 
 # To chose the model
 
-parser.add_argument(
-    "-op", "--optimiser", help="Choice of torch optimiser.", type=str
-)
 parser.add_argument(
     "-s", "--seed", help="Seed for the initial parameters", type=int, default=0
 )
@@ -37,17 +34,22 @@ parser.add_argument(
 )
 parser.add_argument("-r", "--runs", help="Number of runs", type=int, default=1)
 parser.add_argument(
-    "-dat",
-    "--dataset",
-    help="Directory of the full dataset, from which train and val subsets are extracted.",
+    "-tr",
+    "--train",
+    help="Directory of the train dataset",
+    type=str,
+)
+parser.add_argument(
+    "-val",
+    "--test",
+    help="Directory of the test dataset",
     type=str,
 )
 parser.add_argument(
     "-te",
-    "--test",
-    help="Directory of the test dataset",
+    "--dummy",
+    help="Directory of the dummy dataset",
     type=str,
-    default="../datasets/multiclass/reviews_filtered_test_sentence_bert.csv",
 )
 parser.add_argument(
     "-o",
@@ -104,19 +106,19 @@ def main(args):
     random.seed(args.seed)
     seed_list = random.sample(range(1, int(2**32 - 1)), int(args.runs))
 
-    model_name = "alpha_3_multiclass"
+    model_name = "alpha_3_multiclass_original"
 
     all_training_loss_list = []
     all_training_acc_list = []
-    all_validation_loss_list = []
-    all_validation_acc_list = []
+    all_test_loss_list = []
+    all_test_acc_list = []
 
     all_prediction_list = []
     all_time_list = []
 
     all_best_model_state_dict = []
 
-    best_val_acc_all_runs = 0
+    best_test_acc_all_runs = 0
     best_run = 0
 
     timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -132,12 +134,11 @@ def main(args):
         print("-----------------------------------")
         print("\n")
 
-        trainer = Alpha_3_multiclass_trainer(
-            args.optimiser,
-            i,
+        trainer = Alpha_3_multiclass_trainer_tests(
             args.iterations,
-            args.dataset,
+            args.train,
             args.test,
+            args.dummy,
             seed_list[i],
             args.n_qubits,
             args.q_delta,
@@ -151,9 +152,9 @@ def main(args):
         (
             training_loss_list,
             training_acc_list,
-            validation_loss_list,
-            validation_acc_list,
-            best_val_acc,
+            test_loss_list,
+            test_acc_list,
+            best_test_acc,
             best_model,
         ) = trainer.train()
 
@@ -163,10 +164,10 @@ def main(args):
 
         prediction_list = trainer.predict().tolist()
 
-        test_loss, test_acc = trainer.compute_test_logs(best_model)
+        # dummy_loss, dummy_acc = trainer.compute_dummy_logs(best_model)
 
-        if best_val_acc > best_val_acc_all_runs:
-            best_val_acc_all_runs = best_val_acc
+        if best_test_acc > best_test_acc_all_runs:
+            best_test_acc_all_runs = best_test_acc
             best_run = i
 
         # Save the results of each run in a json file
@@ -174,13 +175,11 @@ def main(args):
             args,
             prediction_list,
             time_taken,
-            best_val_acc=best_val_acc_all_runs,
+            best_test_acc=best_test_acc_all_runs,
             best_run=best_run,
             seed_list=seed_list[i],
-            test_acc=test_acc,
-            test_loss=test_loss,
-            val_acc=validation_acc_list,
-            val_loss=validation_loss_list,
+            test_acc=test_acc_list,
+            test_loss=test_loss_list,
             train_acc=training_acc_list,
             train_loss=training_loss_list,
         )

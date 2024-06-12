@@ -2,7 +2,7 @@ import sys
 import os
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(current_path + "/../../models/quantum/alpha/module/")
+sys.path.append(current_path + "/../../models/quantum/beta_2_3/")
 import argparse
 
 import json
@@ -14,7 +14,7 @@ import torch
 import time
 import git
 
-from alpha_3_multiclass_trainer import Alpha_3_multiclass_trainer
+from beta_2_3_trainer_tests import Beta_2_3_trainer_tests
 from save_json_output import JsonOutputer
 
 
@@ -104,19 +104,19 @@ def main(args):
     random.seed(args.seed)
     seed_list = random.sample(range(1, int(2**32 - 1)), int(args.runs))
 
-    model_name = "alpha_3_multiclass"
+    model_name = "beta_2_3_tests"
 
     all_training_loss_list = []
     all_training_acc_list = []
-    all_validation_loss_list = []
-    all_validation_acc_list = []
+    all_test_loss_list = []
+    all_test_acc_list = []
 
     all_prediction_list = []
     all_time_list = []
 
     all_best_model_state_dict = []
 
-    best_val_acc_all_runs = 0
+    best_test_acc_all_runs = 0
     best_run = 0
 
     timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -124,21 +124,24 @@ def main(args):
     # Create the JsonOutputer object
     json_outputer = JsonOutputer(model_name, timestr, args.output)
 
-    for i in range(args.runs):
+    num_completed_runs = 0
+    num_runs_left = args.runs - num_completed_runs
+
+    for i in range(num_runs_left):
         t_before = time.time()
         print("\n")
         print("-----------------------------------")
-        print("run = ", i + 1)
+        print("run = ", i + 1 + num_completed_runs)
         print("-----------------------------------")
         print("\n")
 
-        trainer = Alpha_3_multiclass_trainer(
+        trainer = Beta_2_3_trainer_tests(
             args.optimiser,
             i,
             args.iterations,
             args.dataset,
             args.test,
-            seed_list[i],
+            seed_list[i + num_completed_runs],
             args.n_qubits,
             args.q_delta,
             args.batch_size,
@@ -151,9 +154,9 @@ def main(args):
         (
             training_loss_list,
             training_acc_list,
-            validation_loss_list,
-            validation_acc_list,
-            best_val_acc,
+            test_loss_list,
+            test_acc_list,
+            best_test_acc,
             best_model,
         ) = trainer.train()
 
@@ -163,30 +166,28 @@ def main(args):
 
         prediction_list = trainer.predict().tolist()
 
-        test_loss, test_acc = trainer.compute_test_logs(best_model)
-
-        if best_val_acc > best_val_acc_all_runs:
-            best_val_acc_all_runs = best_val_acc
-            best_run = i
+        # test_loss, test_acc = trainer.compute_test_logs(best_model)
+        if best_test_acc > best_test_acc_all_runs:
+            best_test_acc_all_runs = best_test_acc
+            best_run = i + num_completed_runs
 
         # Save the results of each run in a json file
         json_outputer.save_json_output_run_by_run(
             args,
             prediction_list,
             time_taken,
-            best_val_acc=best_val_acc_all_runs,
+            best_test_acc=best_test_acc_all_runs,
             best_run=best_run,
-            seed_list=seed_list[i],
-            test_acc=test_acc,
-            test_loss=test_loss,
-            val_acc=validation_acc_list,
-            val_loss=validation_loss_list,
+            seed_list=seed_list[i + num_completed_runs],
+            test_acc=test_acc_list,
+            test_loss=test_loss_list,
             train_acc=training_acc_list,
             train_loss=training_loss_list,
         )
 
         model_path = os.path.join(
-            args.output, f"{model_name}_{timestr}_run_{i}.pt"
+            args.output,
+            f"{model_name}_{timestr}_run_{i + num_completed_runs}.pt",  # CHANGED FOR CHECKPOINT
         )
         torch.save(best_model, model_path)
 
