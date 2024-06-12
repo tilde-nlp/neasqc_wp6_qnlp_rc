@@ -4,7 +4,7 @@ import torch.nn as nn
 from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader
 from torchinfo import summary
-from alpha_6_model import Alpha_6_model
+from beta_2_3_model import Beta_2_3_model
 from utils_alpha_6 import (
     seed_everything,
     preprocess_train_test_dataset_for_alpha_6,
@@ -12,7 +12,7 @@ from utils_alpha_6 import (
 )
 
 
-class Alpha_6_trainer:
+class Beta_2_trainer:
     def __init__(
         self,
         optimiser: str,
@@ -88,7 +88,7 @@ class Alpha_6_trainer:
         )
 
         # initialise model
-        self.model = Alpha_6_model(
+        self.model = Beta_2_3_model(
             self.n_qubits, self.q_delta, self.n_classes, self.device
         )
 
