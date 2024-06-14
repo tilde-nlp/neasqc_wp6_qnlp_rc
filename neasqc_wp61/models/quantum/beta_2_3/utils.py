@@ -137,7 +137,7 @@ def fit_pca(df, n_components):
     return pca
 
 
-def preprocess_train_test_dataset_for_alpha_6(
+def preprocess_train_test_dataset_for_beta_2(
     run_number,
     dataset_csv_file,
     test_csv_file,
@@ -204,6 +204,110 @@ def preprocess_train_test_dataset_for_alpha_6(
     )
 
     return X_train, X_val, X_test, y_train, y_val, y_test
+
+
+def preprocess_train_test_dataset_for_beta_3(
+    run_number,
+    dataset_csv_file,
+    test_csv_file,
+):
+    """
+    Preprocess function for the dataset for the alpha 3 model
+    """
+
+    df_dataset = pd.read_csv(dataset_csv_file)
+    df_test = pd.read_csv(test_csv_file)
+
+    # Set up for 5-fold with 10 runs
+    run_number += 1
+    if 1 <= run_number <= 2:
+        split_idx = 0
+    elif 3 <= run_number <= 4:
+        split_idx = 1
+    elif 5 <= run_number <= 6:
+        split_idx = 2
+    elif 7 <= run_number <= 8:
+        split_idx = 3
+    elif 9 <= run_number <= 10:
+        split_idx = 4
+
+    print(
+        f"---------------------------\nSplit = {split_idx}\n----------------------------"
+    )
+
+    df_train = df_dataset[df_dataset["split"] != split_idx]
+    df_val = df_dataset[df_dataset["split"] == split_idx]
+
+    train_reduced_embeddings = df_train["reduced_embedding"].apply(eval)
+    val_reduced_embeddings = df_val["reduced_embedding"].apply(eval)
+    test_reduced_embeddings = df_test["reduced_embedding"].apply(eval)
+
+    enc = preprocessing.OneHotEncoder(handle_unknown="ignore")
+    enc.fit(df_train["class"].append(df_val["class"]).values.reshape(-1, 1))
+
+    df_train["class"] = (
+        enc.transform(df_train["class"].values.reshape(-1, 1))
+        .toarray()
+        .tolist()
+    )
+    df_val["class"] = (
+        enc.transform(df_val["class"].values.reshape(-1, 1)).toarray().tolist()
+    )
+    df_test["class"] = (
+        enc.transform(df_test["class"].values.reshape(-1, 1))
+        .toarray()
+        .tolist()
+    )
+
+    X_train, y_train, X_val, y_val, X_test, y_test = (
+        train_reduced_embeddings,
+        df_train["class"],
+        val_reduced_embeddings,
+        df_val["class"],
+        test_reduced_embeddings,
+        df_test["class"],
+    )
+
+    return X_train, X_val, X_test, y_train, y_val, y_test
+
+
+def preprocess_train_test_dataset_for_beta_2_3_tests(
+    train_csv_file, test_csv_file
+):
+    """
+    Preprocess function for the dataset for the alpha 3 model
+    """
+    df_train = pd.read_csv(train_csv_file)
+    df_test = pd.read_csv(test_csv_file)
+    # df_dummy = pd.read_csv(dummy_csv_file)
+
+    df_train["reduced_embedding"] = df_train["reduced_embedding"].apply(eval)
+    df_test["reduced_embedding"] = df_test["reduced_embedding"].apply(eval)
+    # df_dummy['sentence_embedding'] = np.array([np.fromstring(embedding.strip(' []'), sep=',') for embedding in df_test['sentence_embedding']]).tolist()
+
+    enc = preprocessing.OneHotEncoder(handle_unknown="ignore")
+    enc.fit(df_train["class"].append(df_test["class"]).values.reshape(-1, 1))
+
+    df_train["class"] = (
+        enc.transform(df_train["class"].values.reshape(-1, 1))
+        .toarray()
+        .tolist()
+    )
+    df_test["class"] = (
+        enc.transform(df_test["class"].values.reshape(-1, 1))
+        .toarray()
+        .tolist()
+    )
+    # df_dummy['class'] = enc.transform(df_dummy['class'].values.reshape(-1, 1)).toarray().tolist()
+
+    X_train, y_train, X_test, y_test = (
+        df_train["reduced_embedding"],
+        df_train["class"],
+        df_test["reduced_embedding"],
+        df_test["class"],
+    )
+
+    return X_train, X_test, y_train, y_test
 
 
 class BertEmbeddingDataset(Dataset):

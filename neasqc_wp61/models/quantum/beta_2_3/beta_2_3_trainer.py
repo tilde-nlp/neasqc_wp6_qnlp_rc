@@ -5,16 +5,18 @@ from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader
 from torchinfo import summary
 from beta_2_3_model import Beta_2_3_model
-from utils_alpha_6 import (
+from utils import (
     seed_everything,
-    preprocess_train_test_dataset_for_alpha_6,
+    preprocess_train_test_dataset_for_beta_2,
+    preprocess_train_test_dataset_for_beta_3,
     BertEmbeddingDataset,
 )
 
 
-class Beta_2_trainer:
+class Beta_2_3_trainer:
     def __init__(
         self,
+        model: str,
         optimiser: str,
         run_number: int,
         number_of_epochs: int,
@@ -30,6 +32,7 @@ class Beta_2_trainer:
         gamma: float,
     ):
 
+        self.model = model
         self.optimiser = optimiser
         self.run_number = run_number
         self.number_of_epochs = number_of_epochs
@@ -49,16 +52,32 @@ class Beta_2_trainer:
         # seed everything
         seed_everything(self.seed)
 
-        (
-            self.X_train,
-            self.X_val,
-            self.X_test,
-            self.Y_train,
-            self.Y_val,
-            self.Y_test,
-        ) = preprocess_train_test_dataset_for_alpha_6(
-            self.run_number, self.dataset_path, self.test_path
-        )
+        if self.model == "beta_2":
+            (
+                self.X_train,
+                self.X_val,
+                self.X_test,
+                self.Y_train,
+                self.Y_val,
+                self.Y_test,
+            ) = preprocess_train_test_dataset_for_beta_2(
+                self.run_number, self.dataset_path, self.test_path
+            )
+        elif self.model == "beta_3":
+            (
+                self.X_train,
+                self.X_val,
+                self.X_test,
+                self.Y_train,
+                self.Y_val,
+                self.Y_test,
+            ) = preprocess_train_test_dataset_for_beta_3(
+                self.run_number, self.dataset_path, self.test_path
+            )
+        else:
+            raise ValueError(
+                "Unrecognised model specified. Please choose between beta_2 or beta_3."
+            )
 
         self.n_classes = self.Y_train.apply(tuple).nunique()
 

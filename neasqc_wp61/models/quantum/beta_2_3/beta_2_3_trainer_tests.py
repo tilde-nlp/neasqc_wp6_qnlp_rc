@@ -5,9 +5,9 @@ from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader
 from torchinfo import summary
 from beta_2_3_model import Beta_2_3_model
-from utils_tests import (
+from utils import (
     seed_everything,
-    preprocess_train_test_dataset_for_alpha_6,
+    preprocess_train_test_dataset_for_beta_2_3_tests,
     BertEmbeddingDataset,
 )
 
@@ -54,7 +54,7 @@ class Beta_2_3_trainer_tests:
             self.X_test,
             self.Y_train,
             self.Y_test,
-        ) = preprocess_train_test_dataset_for_alpha_6(
+        ) = preprocess_train_test_dataset_for_beta_2_3_tests(
             self.train_path, self.test_path
         )
 

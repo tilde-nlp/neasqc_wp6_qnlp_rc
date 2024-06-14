@@ -14,7 +14,7 @@ import torch
 import time
 import git
 
-from beta_2_trainer import Beta_2_trainer
+from beta_2_3_trainer import Beta_2_3_trainer
 from save_json_output import JsonOutputer
 
 
@@ -22,6 +22,9 @@ parser = argparse.ArgumentParser()
 
 # To chose the model
 
+parser.add_argument(
+    "-m", "--model", help="Model to be ran - either beta_2 or beta_3", type=str
+)
 parser.add_argument(
     "-op", "--optimiser", help="Choice of torch optimiser.", type=str
 )
@@ -104,7 +107,7 @@ def main(args):
     random.seed(args.seed)
     seed_list = random.sample(range(1, int(2**32 - 1)), int(args.runs))
 
-    model_name = "beta_2"
+    model_name = args.model
 
     all_training_loss_list = []
     all_training_acc_list = []
@@ -132,7 +135,8 @@ def main(args):
         print("-----------------------------------")
         print("\n")
 
-        trainer = Beta_2_trainer(
+        trainer = Beta_2_3_trainer(
+            args.model,
             args.optimiser,
             i,
             args.iterations,
