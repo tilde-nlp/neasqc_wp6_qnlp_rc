@@ -23,6 +23,12 @@ parser = argparse.ArgumentParser()
 # To chose the model
 
 parser.add_argument(
+    "-m",
+    "--model",
+    help="Model to be ran - either beta_2_tests or beta_3_tests",
+    type=str,
+)
+parser.add_argument(
     "-op", "--optimiser", help="Choice of torch optimiser.", type=str
 )
 parser.add_argument(
