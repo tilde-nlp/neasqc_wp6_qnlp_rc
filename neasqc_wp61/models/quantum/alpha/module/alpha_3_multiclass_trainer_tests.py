@@ -11,13 +11,12 @@ from utils_tests import (
 )
 
 
-class Alpha_3_multiclass_trainer:
+class Alpha_3_multiclass_trainer_tests:
     def __init__(
         self,
         number_of_epochs: int,
         train_path: str,
         test_path: str,
-        dummy_path: str,  # ignore
         seed: int,
         n_qubits: int,
         q_delta: float,
@@ -31,7 +30,6 @@ class Alpha_3_multiclass_trainer:
         self.number_of_epochs = number_of_epochs
         self.train_path = train_path
         self.test_path = test_path
-        self.dummy_path = dummy_path  # ignore
         self.seed = seed
         self.n_qubits = n_qubits
         self.q_delta = q_delta

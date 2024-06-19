@@ -40,15 +40,9 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument(
-    "-val",
+    "-te",
     "--test",
     help="Directory of the test dataset",
-    type=str,
-)
-parser.add_argument(
-    "-te",
-    "--dummy",
-    help="Directory of the dummy dataset",
     type=str,
 )
 parser.add_argument(
@@ -138,7 +132,6 @@ def main(args):
             args.iterations,
             args.train,
             args.test,
-            args.dummy,
             seed_list[i],
             args.n_qubits,
             args.q_delta,
