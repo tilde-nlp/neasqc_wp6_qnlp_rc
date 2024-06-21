@@ -14,7 +14,7 @@ We here detail the procedure to be followed for cloning.
   3. Click on the green code button and choose the cloning method you want to use, GitHub provides detailes steps for each method (HTTPS, SSH, etc).
   4. Open a terminal on your computer and navigate to the directory you wish to clone the repository into. 
   5. Run the following command in your terminal:
-      <pre><code>$ git clone &ltcopied_url&gt</pre></code></li>
+      <pre><code>$ git clone &lthttps://github.com/NEASQC/WP6_QNLP/&gt</pre></code></li>
   6. Navigate into the cloned repository by using 
      <pre><code>$ cd WP6_QNLP</pre></code> </li>
   7. Run the following command in your terminal: 
@@ -23,11 +23,10 @@ We here detail the procedure to be followed for cloning.
 
 ### Creating a new environment and installing required packages
 
-The code in this repository requires Python 3.10. Pleaase ensure you have this installed in your system before proceeding.
+The code in this repository requires Python 3.10. Please ensure you have this installed in your system before proceeding.
 
 #### Dependencies
 
-##### Poetry
 We assume that you are happy to use `poetry`'s lightweight virtual environenment set-up. If for some reason you prefer to use an external virtual environemnt, simply activate it before using `poetry`, it will respect its precedence.
 <ol>
   <li> Make sure you have <code>poetry</code> installed locally. This can be done by running  <pre><code>$ poetry --version</pre></code> in your shell and checking the output. If installed, proceed, if not, follow instructions on their official website <a href="https://python-poetry.org/docs/#installation">here</a>. </li>
@@ -37,17 +36,11 @@ We assume that you are happy to use `poetry`'s lightweight virtual environenment
   <pre><code>poetry install --with docs</pre></code></li>
 </ol>
 
-#### Activating the virtual environments
+#### Activating the virtual environment
 
-##### Poetry
 To activate <code>poetry</code>'s default virtual environment, simply run:
 <pre><code>poetry shell</code></pre>
 inside your terminal. More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
-
-##### Virtualenv
-To activate your virtualenv, simply type the following in your terminal:
-<pre><code>$ source &ltenvironment_name&gt/bin/activate</pre></code>
-Note that contrary to <code>poetry</code>, this virtual environment needs to be activated before you install the requirements.
 
 ## Models
 
@@ -85,6 +78,8 @@ Each version also has a pipeline file, which pieces the model and trainer togeth
 
 #### Datasets (standard version)
 
+**NOTE: we recommend that you store all datasets in neasqc_wp61/data/datasets**
+
 To run Alpha 3, you must have a dataset in CSV format consisting of 3 columns:
  
 * 'class' - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
@@ -93,11 +88,17 @@ To run Alpha 3, you must have a dataset in CSV format consisting of 3 columns:
 
 * 'sentence_embedding' - this column will contain the sentence embeddings (e.g. BERT, ember-v1, etc.) corresponding to each sentence. The embeddings should be in standard list/vector notation format, e.g. [a,b,...,z].
 
-If you have a CSV file with 'class' and 'sentence' labels, and you want to add a column with the corresponding BERT embeddings, you may use our [dataset_vectoriser.py](/neasqc_wp61/data/data_processing/dataset_vectoriser.py) script as follows:
+If you have a CSV file with 'class' and 'sentence' labels, and you want to add a column with the corresponding BERT embeddings, you may use our [dataset_vectoriser.py](/neasqc_wp61/data/data_processing/dataset_vectoriser.py) script. From the root of the repo do:
+```
+cd neasqc_wp61/data/data_processing/
+```
+and then run the script:
 ```
 python dataset_vectoriser.py <path-to-your-csv-dataset> -e sentence
 ```
-This will produce a new CSV file identical to your dataset but with an additional column 'sentence_embedding' containing the embeddings for each sentence.
+This will produce a new CSV file identical to your dataset but with an additional column 'sentence_embedding' containing the embeddings for each sentence. This file will be saved to the same directory in which your dataset lives. You want to do this both for your train and test datasets.
+
+**NOTE: the datasets that we used can be found [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/v2-classical-nlp-models/neasqc_wp61/data/datasets). Please note that to use these yourself you will have to add the 'class' and 'sentence' column headers and convert the format to csv. This is very easy to do with the pandas Python library**
 
 #### Datasets (cross-validation version)
 
@@ -105,6 +106,8 @@ If you wish to use our cross-validation version of the Alpha 3 model, simply ens
 * 'split' - this column contains numbers that indicate the split to which the sentence belongs to. For K-fold cross-validation, these numbers should be in the range [0, K-1]
 
 Adding this column is simple using the <code>pandas</code> Python library. Make sure you choose an appropriate number of splits based on the size of your dataset.
+
+Once this column is present you can run the [dataset_vectoriser.py](/neasqc_wp61/data/data_processing/dataset_vectoriser.py) script as per above.
 
 Your test dataset file does not require this 'split' column, only the 3 columns indicated in the previous section.
 
@@ -135,7 +138,7 @@ And, instead, for the cross-validation version we have:
 * -f : path to the dataset containing the training and validation data with the split information as detailed before.
 * -v : path to the test dataset.
 
-Below we give an example on how to run both these versions from the command line. Make sure your Python environment is active and that you run this from the root of the repo (the *neasqc_wp61* directory).
+Below we give an example on how to run both these versions from the command line. Make sure your Python environment is active and that you run this from the the *neasqc_wp61* directory where the `6_Classify_With_Quantum_Model.sh` is located.
 
 **Standard Version**
 ```
@@ -186,7 +189,11 @@ To run Beta 2, you must have a dataset in CSV format consisting of 4 columns:
 
 * 'reduced_embedding' - this column will contain the PCA-reduced sentence embeddings, in the same format as the full sentence embeddings.
 
-Assuming you have a dataset with the first three columns (from following the instructions for Alpha 3), you can generate a new dataset with the additional 'reduced_embedding' column by using our [generate_pca_test_dataset.py](/neasqc_wp61/data/data_processing/generate_pca_test_dataset.py) script. Simply open the script and change the path in line 5 to that of your dataset, and the path in line 18 to your desired output name and directory. Save and close then run the script:
+Assuming you have a dataset with the first three columns (from following the instructions for Alpha 3), you can generate a new dataset with the additional 'reduced_embedding' column by using our [generate_pca_test_dataset.py](/neasqc_wp61/data/data_processing/generate_pca_test_dataset.py) script. Simply open the script and change the path in line 5 to that of your dataset, and the path in line 18 to your desired output name and directory. Save and close. From the root of the repo do:
+```
+cd neasqc_wp61/data/data_processing/
+```
+and then run the script:
 ```
 python generate_pca_test_dataset.py
 ```
@@ -202,7 +209,11 @@ Adding this column is simple using the <code>pandas</code> Python library. Make 
 
 Once this is done, you need an addtional set of columns 'reduced_embedding_i'. These columns contain the PCA-reduced embeddings, with i indicating that the embeddings have been reduced with a PCA that has been fitted on the training data for split i (that is, all other splits != i). If you have a dataset with all other columns, these columns are easy to add using our [generate_pca_dataset.py](/neasqc_wp61/data/data_processing/generate_pca_dataset.py) script. 
 
-Simply open the script, edit line 5 to include the path to your dataset containing the train+validation data, and edit line 30 with your desired output file path and name. Then save and close and run the script:
+Simply open the script, edit line 5 to include the path to your dataset containing the train+validation data, and edit line 30 with your desired output file path and name. Then save and close. From the root of the repo do:
+```
+cd neasqc_wp61/data/data_processing/
+```
+and then run the script:
 ```
 python generate_pca_dataset.py 
 ```
@@ -230,7 +241,7 @@ The model has a number of parameters that must be specified through flags in the
 * -f : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
 * -v : the path to the test dataset.
 
-Below we give an example on how to run both versions of Beta 2 from the command line. Make sure your Python environment is active and that you run this from the root of the repo (the *neasqc_wp61* directory).
+Below we give an example on how to run both versions of Beta 2 from the command line. Make sure your Python environment is active and that you run this from the the *neasqc_wp61* directory.
 
 **Standard Version**
 ```
@@ -277,7 +288,11 @@ To run Beta 2, you must have a dataset in CSV format consisting of 3 columns:
 
 * 'reduced_embedding' - this column will contain the reduced fastText embeddings in standard vector format, i.e. [a,b,...,z]
 
-Assuming you have a CSV file with the first two columns, if you want to generate the reduced fastText embeddings and add them to a new 'reduced_embedding' column, you can use our [generate_fasttext_dataset.py](/neasqc_wp61/data/data_processing/generate_fasttext_dataset.py) script. Simply open the file, edit line 7 with the path to your CSV file, edit line 26 with your desired output path, then save and close. You can now run this script by doing:
+Assuming you have a CSV file with the first two columns, if you want to generate the reduced fastText embeddings and add them to a new 'reduced_embedding' column, you can use our [generate_fasttext_dataset.py](/neasqc_wp61/data/data_processing/generate_fasttext_dataset.py) script. Simply open the file, edit line 7 with the path to your CSV file, edit line 25 with your desired output path, then save and close. From the root of the repo do:
+```
+cd neasqc_wp61/data/data_processing/
+```
+and then run the script:
 ```
 python generate_fasttext_dataset.py
 ```
@@ -310,7 +325,7 @@ The model has a number of parameters that must be specified through flags in the
 * -f : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
 * -v : the path to the test dataset.
 
-Below we give an example on how to run both versions of Beta 3 from the command line. Make sure your Python environment is active and that you run this from the root of the repo (the *neasqc_wp61* directory).
+Below we give an example on how to run both versions of Beta 3 from the command line. Make sure your Python environment is active and that you run this from the the *neasqc_wp61* directory.
 
 **Standard Version**
 ```
