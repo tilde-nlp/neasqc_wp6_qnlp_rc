@@ -15,7 +15,7 @@ def vectorise(dataset, embedding):
     each sentence.
     """
     dftrain = pd.read_csv(dataset)
-    dftrain = dftrain.drop(columns=[2])
+    # dftrain = dftrain.drop(columns=[2])
     # dftrain.columns = ['class', 'sentence']
     tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
     bert_model = BertModel.from_pretrained("bert-base-uncased")
