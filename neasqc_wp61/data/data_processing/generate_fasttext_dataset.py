@@ -20,4 +20,14 @@ for sentence in df.sentence.values:
 
 df["reduced_embedding"] = reduced_embedding_list
 
+embeddings = df["reduced_embedding"].tolist()
+out_embeddings = []
+
+for embedding in embeddings:
+    cleaned_str = embedding.strip()[1:-1].strip()
+    out_embedding = list(map(float, cleaned_str.split()))
+    out_embeddings.append(out_embedding)
+
+df["reduced_embedding"] = out_embeddings
+
 df.to_csv("../datasets/agnews_balanced_test_fasttext.csv", index=False)
