@@ -3,7 +3,8 @@ import torch
 import torch.nn as nn
 from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader
-from torchinfo import summary
+
+# from torchinfo import summary
 from beta_2_3_model import Beta_2_3_model
 from utils import (
     seed_everything,
@@ -90,7 +91,7 @@ class Beta_2_3_trainer_tests:
             self.n_qubits, self.q_delta, self.n_classes, self.device
         )
 
-        summary(self.model)
+        # summary(self.model)
 
         # initialise loss and optimizer
         self.criterion = nn.CrossEntropyLoss()
