@@ -4,12 +4,11 @@ import fasttext.util as ftu
 
 # Load the dataframe
 df = pd.read_csv(
-    "~/Downloads/neasqc_data_cvsplit_and_test/ag_news_balanced_test.tsv",
-    delimiter="\t",
+    "~/Downloads/neasqc_data_cvsplit_and_test/ag_news_balanced_test.tsv"
 )
 
 # Rename the "text" column to "sentence"
-df.rename(columns={"text": "sentence"}, inplace=True)
+# df.rename(columns={"text": "sentence"}, inplace=True)
 
 ftu.download_model("en", if_exists="ignore")
 model = ft.load_model("cc.en.300.bin")
