@@ -3,9 +3,7 @@ import fasttext as ft
 import fasttext.util as ftu
 
 # Load the dataframe
-df = pd.read_csv(
-    "~/Downloads/neasqc_data_cvsplit_and_test/ag_news_balanced_test.tsv"
-)
+df = pd.read_csv("../datasets/ag_news_balanced_test.tsv")
 
 # Rename the "text" column to "sentence"
 # df.rename(columns={"text": "sentence"}, inplace=True)
@@ -22,4 +20,4 @@ for sentence in df.sentence.values:
 
 df["reduced_embedding"] = reduced_embedding_list
 
-df.to_csv("./data/datasets/agnews_balanced_test_fasttext.csv", index=False)
+df.to_csv("../datasets/agnews_balanced_test_fasttext.csv", index=False)
