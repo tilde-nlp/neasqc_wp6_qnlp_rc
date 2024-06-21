@@ -23,32 +23,12 @@ We here detail the procedure to be followed for cloning.
 
 ### Creating a new environment and installing required packages
 
-#### Python version
-The Python version required to run the scripts and notebooks of this repository is Python 3.10. Due to the use of myQLM in one of our models, only [python.org](https://www.python.org/downloads/macos/) and `brew` python distributions are supported. `conda` and `pyenv` won't work.
-
-
-1. If Python3.10 hasn't been installed (<em><strong>using brew</strong></em>) yet, or Python3.10 has been installed using any other method:
-    * Install brew following the instructions detailed [here](https://brew.sh/). 
-    * Run the following command on the terminal to install it on your local device.
-      <pre><code>$ brew install python@3.10</pre></code>
-    * By running the following command on the terminal, we make sure that we will link the recently installed Python3.10 to the environmental variable <em><strong>python3.10</em></strong>.
-      <pre><code>$ brew link --overwrite python@3.10</pre></code>
-      We may get an error if there was any other environmental variable named <em><strong>python3.10</em></strong>. In that case we must remove the variable from the PATH with the command: 
-      <pre><code>$ unset python3.10</pre></code>
-      and then use brew link command again.
-2. If Python3.10 has been already installed (<em><strong>using brew</em></strong>):
-    * We make sure that we have it linked to the the environmental variable <em><strong>python3.10</em></strong> using the command shown on section 1.2. A warning message will appear if we have it already linked (we can ignore it).
-    * We make sure that there are no packages installed on the global Python by running the command: 
-      <pre><code>$ python3.10 -m pip list</pre></code>
-      In the case where there were packages installed on the global Python we should uninstall them with the command: 
-      <pre><code>$ python3.10 -m pip uninstall &ltundesired package&gt</pre></code>
-
-
+The code in this repository requires Python 3.10. Pleaase ensure you have this installed in your system before proceeding.
 
 #### Dependencies
 
 ##### Poetry
-Note: we here assume that you are happy to use `poetry`'s lightweight virtual environenment set-up. If for some reason you prefer to use an external virtual environemnt, simply activate it before using `poetry`, it will respect its precedence.
+We assume that you are happy to use `poetry`'s lightweight virtual environenment set-up. If for some reason you prefer to use an external virtual environemnt, simply activate it before using `poetry`, it will respect its precedence.
 <ol>
   <li> Make sure you have <code>poetry</code> installed locally. This can be done by running  <pre><code>$ poetry --version</pre></code> in your shell and checking the output. If installed, proceed, if not, follow instructions on their official website <a href="https://python-poetry.org/docs/#installation">here</a>. </li>
   <li> <code>cd</code> to the root of the repository where the files <code>pyproject.toml</code> and <code>poetry.lock</code> are located. </li>
@@ -56,21 +36,6 @@ Note: we here assume that you are happy to use `poetry`'s lightweight virtual en
   If you also want to install the dependancies used to build sphinx documentation, run the following command insted:
   <pre><code>poetry install --with docs</pre></code></li>
 </ol>
-
-
-##### Virtualenv
-Note: As mentioned previously, one of our models uses myQLM, which will not work on a virtual env. However, all other models should work without issues.
-<ol>
-  <li>To create a virtual environment, go to the directory where you want to create it and run the following command in the terminal:
-    <pre><code>$ python3.10 -m venv &ltenvironment_name&gt</pre></code></li>
-  <li> Activate the environment (see instructions <a href="#venv_activation">here</a>). If the environment has been activated correctly its name should appear in parentheses on the left of the user name in the terminal.</li>
-  <li>Ensure pip is installed. If if not, follow instructions found <a href="https://pip.pypa.io/en/stable/installation/">here</a> to install it.</li>
-  <li> To install the required packages, run the command:
-    <pre><code>$ python3.10 -m pip install -r requirements.txt</pre></code></li>
-</ol>
-
-
-
 
 #### Activating the virtual environments
 
@@ -89,6 +54,10 @@ Note that contrary to <code>poetry</code>, this virtual environment needs to be 
 In this section we present our main models - Alpha 3, Beta 2 and Beta 3. 
 
 To learn about our other models, please see [path to archive models] and read the README file for that directory.
+
+The input to these models are different, but all models produce the same output: 
+* A JSON file the details of all the runs (loss, accuracy, runtime, etc.)
+* A .pt file for each run with the final weights of the model at the end of such run.
 
 ### Alpha 3 
 
@@ -207,7 +176,7 @@ The pipeline files for Beta 2 are:
 
 #### Datasets (standard version)
 
-To run Beta 2, you must have a dataset in CSV format consisting of 3 columns:
+To run Beta 2, you must have a dataset in CSV format consisting of 4 columns:
  
 * 'class' - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
 
@@ -297,3 +266,57 @@ The trainer files for Beta 3 are:
 The pipeline files for Beta 3 are:
 * [use_beta_2_3_tests.py](/neasqc_wp61/data/data_processing/use_beta_2_3_tests.py) for the **standard** version.
 * [use_beta_2_3.py](/neasqc_wp61/data/data_processing/use_beta_2_3.py) for the **cross-validation** version.
+
+#### Datasets (standard version)
+
+To run Beta 2, you must have a dataset in CSV format consisting of 3 columns:
+ 
+* 'class' - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
+
+* 'sentence' - this column will contain the natural language sentences that will be classified by the model.
+
+* 'reduced_embedding' - this column will contain the reduced fastText embeddings in standard vector format, i.e. [a,b,...,z]
+
+Assuming you have a CSV file with the first two columns, if you want to generate the reduced fastText embeddings and add them to a new 'reduced_embedding' column, you can use our [generate_fasttext_dataset.py](/neasqc_wp61/data/data_processing/generate_fasttext_dataset.py) script. Simply open the file, edit line 7 with the path to your CSV file, edit line 26 with your desired output path, then save and close. You can now run this script by doing:
+```
+python generate_fasttext_dataset.py
+```
+which will generate a new CSV file with the fastText embeddings in the 'reduced_embedding' column. Make sure to do this both for your training and testing datasets.
+
+#### Datasets (cross-validation version)
+
+For the cross-validation version, you want the same columns as above, plus the following:
+* 'split' - this column contains numbers in the range [0, K-1] where K is the number of folds in the cross-validation proceedure. This number will indicate what split the data belongs to.
+
+If you have a dataset with the 'class', 'split' and 'sentence' column, and want to vectorise the sentences using fastText and add the result embeddings in a new 'reduced_embedding' column, you can use [generate_fasttext_dataset.py](/neasqc_wp61/data/data_processing/generate_fasttext_dataset.py) as described in the previous subsection.
+
+#### Running the model
+
+The model has a number of parameters that must be specified through flags in the command line. These are:
+
+* -s : an integer seed for result replication.
+* -i : the number of iterations (epochs) for the training of the model.
+* -r : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
+* -u : the number of qubits of the fully-connected quantum circuit
+* -d : q_delta, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
+* -p : the <code>PyTorch</code> optimiser of choice.
+* -b : the batch size.
+* -l: the learning rate for the optimiser.
+* -w : the weight decay (this can be set to 0).
+* -z : the step size for the learning rate scheduler.
+* -g : the gamma for the learning rate scheduler.
+* -o : path for the output file.
+
+* -f : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
+* -v : the path to the test dataset.
+
+Below we give an example on how to run both versions of Beta 3 from the command line. Make sure your Python environment is active and that you run this from the root of the repo (the *neasqc_wp61* directory).
+
+**Standard Version**
+```
+bash 6_Classify_With_Quantum_Model.sh -m beta_3_tests -f <path to train dataset> -v <path to test dataset> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+```
+**Cross-Validation Version**
+```
+bash 6_Classify_With_Quantum_Model.sh -m beta_3 -f <path to split train and validation data>  -v <path to test data> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+```
