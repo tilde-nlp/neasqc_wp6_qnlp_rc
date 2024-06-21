@@ -38,7 +38,6 @@ nltk = "^3.8.1"
 torchvision = "==0.15.2"
 pennylane = "^0.31.0"
 plotly = "^5.15.0"
-torchvision = "==0.15.2"
 
 [tool.poetry.group.docs]
 optional = true
