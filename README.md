@@ -193,32 +193,11 @@ bash 6_Classify_With_Quantum_Model.sh -m beta_2 -f <path to split train and vali
 
 ### Beta3
 
-#### Description
+#### General overview
+Beta3 is simply a different flavour of Beta2. Here, the vector used as input to the PQC is obtained from an adaptive-sized embedding instead of via a PCA.
+The core model is defined in the file `beta_2_3_model.py`.
 
-Beta3 also follows a semi-dressed quantum circuit (SDQC) architecture. 
-
-Unlike in Beta 2, our input to the quantum circuit is not a PCA-reduced sentence embedding, but rather a reduced fastText embedding vector of dimension Q (with some rescaling), where Q is the number of qubits of the circuit. Q is fixed to 8 in our code.
-
-There is no need to use PCA to reduce the sentence embedding, as the fastText library conveniently includes a feature that allows us to reduce the fastText model to our desired dimension (dim=8 in the case of Beta 3).
-
-#### Files
-
-As you may have seen in the previous section on Beta 2, Beta 2 and 3 share model, trainer and pipeline files. This is due to their similarity in that the input to the quantum circuit is a reduced sentence embedding vector of dimension 8. The differences are mainly in the processinf of data, which is done separately for both models using if statements.
-
-Just like Alpha 3 and Beta 2, Beta 3 has a **standard version** and a **cross-validation version**.
-
-The Beta 3 model architecture is defined in the [beta_2_3_model.py](/neasqc_wp61/models/quantum/beta_2_3/beta_2_3_model.py) file.
-
-The trainer files for Beta 3 are:
-*  [beta_2_3_trainer_tests.py](/neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py) for the **standard** version.
-* [beta_2_3_trainer.py](/neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer.py) for the **cross-validation** version.
-
-The pipeline files for Beta 3 are:
-* [use_beta_2_3_tests.py](/neasqc_wp61/data/data_processing/use_beta_2_3_tests.py) for the **standard** version.
-* [use_beta_2_3.py](/neasqc_wp61/data/data_processing/use_beta_2_3.py) for the **cross-validation** version.
-
-#### Datasets (standard version)
-
+##### Dataset formatting
 To run Beta 2, you must have a dataset in CSV format consisting of 3 columns:
  
 * 'class' - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
@@ -237,40 +216,46 @@ python generate_fasttext_dataset.py
 ```
 which will generate a new CSV file with the fastText embeddings in the 'reduced_embedding' column. Make sure to do this both for your training and testing datasets.
 
-#### Datasets (cross-validation version)
+##### Command line arguments
+The model has a number of parameters that must be specified through flags in the command line. These are:
 
+* `-s` : an integer seed for result replication.
+* `-i` : the number of iterations (epochs) for the training of the model.
+* `-r` : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
+* `-u` : the number of qubits of the fully-connected quantum circuit
+* `-d` : q_delta, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
+* `-p` : the <code>PyTorch</code> optimiser of choice.
+* `-b` : the batch size.
+* `-l` : the learning rate for the optimiser.
+* `-w` : the weight decay (this can be set to 0).
+* `-z` : the step size for the learning rate scheduler.
+* `-g` : the gamma for the learning rate scheduler.
+* `-o` : path for the output file.
+* `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
+* `-v` : the path to the test dataset.
+
+#### Standard usage
+The trainer file is `beta_2_3_trainer_tests.py` and pipeline `use_beta_2_3_tests.py`.
+
+##### Standard example
+1. From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
+2. Use the following command:
+```
+bash 6_Classify_With_Quantum_Model.sh -m beta_3_tests -f <path to train dataset> -v <path to test dataset> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+```
+
+#### Cross-validation usage
+The trainer file is `beta_2_3_trainer.py` and pipeline `use_beta_2_3.py`.
+
+##### Dataset formatting for cross-validation
 For the cross-validation version, you want the same columns as above, plus the following:
 * 'split' - this column contains numbers in the range [0, K-1] where K is the number of folds in the cross-validation proceedure. This number will indicate what split the data belongs to.
 
 If you have a dataset with the 'class', 'split' and 'sentence' column, and want to vectorise the sentences using fastText and add the result embeddings in a new 'reduced_embedding' column, you can use [generate_fasttext_dataset.py](/neasqc_wp61/data/data_processing/generate_fasttext_dataset.py) as described in the previous subsection.
 
-#### Running the model
-
-The model has a number of parameters that must be specified through flags in the command line. These are:
-
-* -s : an integer seed for result replication.
-* -i : the number of iterations (epochs) for the training of the model.
-* -r : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
-* -u : the number of qubits of the fully-connected quantum circuit
-* -d : q_delta, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
-* -p : the <code>PyTorch</code> optimiser of choice.
-* -b : the batch size.
-* -l: the learning rate for the optimiser.
-* -w : the weight decay (this can be set to 0).
-* -z : the step size for the learning rate scheduler.
-* -g : the gamma for the learning rate scheduler.
-* -o : path for the output file.
-
-* -f : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
-* -v : the path to the test dataset.
-
-Below we give an example on how to run both versions of Beta 3 from the command line. Make sure your Python environment is active and that you run this from the the *neasqc_wp61* directory.
-
-**Standard Version**
-```
-bash 6_Classify_With_Quantum_Model.sh -m beta_3_tests -f <path to train dataset> -v <path to test dataset> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
-```
-**Cross-Validation Version**
+##### Cross-validation example
+1. From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
+2. Use the following command:
 ```
 bash 6_Classify_With_Quantum_Model.sh -m beta_3 -f <path to split train and validation data>  -v <path to test data> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 ```
