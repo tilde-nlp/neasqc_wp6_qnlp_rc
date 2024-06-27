@@ -2,7 +2,8 @@ import pandas as pd
 from sklearn.decomposition import PCA
 import numpy as np
 
-df = pd.read_csv("../datasets/agnews_balanced_bert.csv")
+#NOTE : input files goes here
+df = pd.read_csv("../datasets/agnews_balanced_train_sentence_bert.csv")
 
 # Convert the string representation to actual lists of embeddings
 df["sentence_embedding"] = df["sentence_embedding"].apply(eval)
@@ -27,4 +28,5 @@ for i in range(5):
     # Add this to a specific column for that particular fold
     df[f"reduced_embedding_{i}"] = reduced_embeddings.tolist()
 
+#NOTE: desired output file directory/location goes here
 df.to_csv("../datasets/agnews_balanced_bert_pca.csv", index=False)
