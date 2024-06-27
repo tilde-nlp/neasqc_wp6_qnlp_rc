@@ -115,13 +115,13 @@ The Beta 2 model architecture is defined in the `beta_2_3_model.py` file. Note h
 ##### Dataset formatting
 To run Beta 2, you must have a dataset in CSV format consisting of 4 columns:
  
-* 'class' - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
+* `class` - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
 
-* 'sentence' - this column will contain the natural language sentences that will be classified by the model.
+* `sentence` - this column will contain the natural language sentences that will be classified by the model.
 
-* 'sentence_embedding' - this column will contain the sentence embeddings (e.g. BERT, ember-v1, etc.) corresponding to each sentence. The embeddings should be in standard list/vector notation format, e.g. [a,b,...,z].
+* `sentence_embedding` - this column will contain the sentence embeddings (e.g. BERT, ember-v1, etc.) corresponding to each sentence. The embeddings should be in standard list/vector notation format, e.g. [a,b,...,z].
 
-* 'reduced_embedding' - this column will contain the PCA-reduced sentence embeddings, in the same format as the full sentence embeddings.
+* `reduced_embedding` - this column will contain the PCA-reduced sentence embeddings, in the same format as the full sentence embeddings.
 
 Assuming you have a dataset with the first three columns (from following the instructions for Alpha 3), you can generate a new dataset with the additional 'reduced_embedding' column by using our `generate_pca_test_dataset.py` script. Simply open the script and change the path in line 5 to that of your dataset, and the path in line 18 to your desired output name and directory. Save and close. From the root of the repo do:
 ```
@@ -160,6 +160,8 @@ The trainer file is `beta_2_3_trainer_tests.py` and the pipeline `use_beta_2_3_t
 ```
 bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f <path to train dataset> -v <path to test dataset> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 ```
+##### TO REMOVE LATER
+bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f data/datasets/agnews_balanced_test_bert_pca.csv -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 
 #### Cross-validation usage
 The trainer file is `beta_2_3_trainer.py` and the pipeline `use_beta_2_3.py`.
