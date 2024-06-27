@@ -1,60 +1,28 @@
 # Quantum Natural Language Processing : NEASQC WP 6.1
 
+## Pre-setup
+The following guide will walk you thorugh how to use our models. Prior to following those steps, you should ensure that you:
+- Have a copy of the repository on your local machine.
+- Have `python 3.10` installed on your local machine. Our models *might* turn out to be compatible with later versions of python but they were designed with and intended for 3.10.
+- Have `poetry` installed on your local machine. You can follow the instructions on <a href="https://python-poetry.org/docs/#installation">the official website</a>.
 
-## Installing locally
-
-### Obtaining a local copy of the code repository
-In order to run the code locally, you will need to obtain a copy of the repository. To this end, you can either fork the repository or clone it. 
-
-#### Cloning
-We here detail the procedure to be followed for cloning.
-
-  1. Open the code repository in your browser.
-  2. Open the drop-down menu on the left. Click on the 'Switch branches/tags' button to select the <code>dev</code> branch.
-  3. Click on the green code button and choose the cloning method you want to use, GitHub provides detailes steps for each method (HTTPS, SSH, etc).
-  4. Open a terminal on your computer and navigate to the directory you wish to clone the repository into. 
-  5. Run the following command in your terminal:
-      <pre><code>$ git clone &lthttps://github.com/NEASQC/WP6_QNLP/&gt</pre></code></li>
-  6. Navigate into the cloned repository by using 
-     <pre><code>$ cd WP6_QNLP</pre></code> </li>
-  7. Run the following command in your terminal: 
-      <pre><code>$ git checkout dev</pre></code></li>
+## Setup
+1. Position yourself in the `dev` branch.
+2. Position yourself in the root of the repository where the files <code>pyproject.toml</code> and <code>poetry.lock</code> are located.
+3. Run the command: <pre><code>$ poetry install</pre></code>. If you also want to install the dependencies to build `sphinx` documentation, use the command <pre><code>poetry install --with docs</pre></code> instead.
+4. Activate the `poetry` usibg the command: <pre><code>poetry shell</code></pre>. More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
 
 
-### Creating a new environment and installing required packages
-
-The code in this repository requires Python 3.10. Please ensure you have this installed in your system before proceeding.
-
-#### Dependencies
-
-We assume that you are happy to use `poetry`'s lightweight virtual environenment set-up. If for some reason you prefer to use an external virtual environemnt, simply activate it before using `poetry`, it will respect its precedence.
-<ol>
-  <li> Make sure you have <code>poetry</code> installed locally. This can be done by running  <pre><code>$ poetry --version</pre></code> in your shell and checking the output. If installed, proceed, if not, follow instructions on their official website <a href="https://python-poetry.org/docs/#installation">here</a>. </li>
-  <li> <code>cd</code> to the root of the repository where the files <code>pyproject.toml</code> and <code>poetry.lock</code> are located. </li>
-  <li> Run the following command in your shell: <pre><code>$ poetry install</pre></code>
-  If you also want to install the dependancies used to build sphinx documentation, run the following command insted:
-  <pre><code>poetry install --with docs</pre></code></li>
-</ol>
-
-#### Activating the virtual environment
-
-To activate <code>poetry</code>'s default virtual environment, simply run:
-<pre><code>poetry shell</code></pre>
-inside your terminal. More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
-
-## Models
-
+## Running models
 In this section we present our main models - Alpha 3, Beta 2 and Beta 3. 
 
-To learn about our other models, please see [path to archive models] and read the README file for that directory.
+Note that each model takes in a different input, but all produce the same output: 
+* A `JSON` file containing the details of all the runs (loss, accuracy, runtime, etc.)
+* A `.pt` file for each run with the final weights of the model at the end of the run.
 
-The input to these models are different, but all models produce the same output: 
-* A JSON file the details of all the runs (loss, accuracy, runtime, etc.)
-* A .pt file for each run with the final weights of the model at the end of such run.
+
 
 ### Alpha 3 
-
-#### Description
 
 Alpha 3 follows a dressed quantum circuit (DQC) architecture, meaning that it combines a classical network architecture with a quantum circuit. A fully-connected quantum circuit is sandwiched between multi-layer perceptrons (MLPs). This model performs multiclass classification of natural language data.
 
