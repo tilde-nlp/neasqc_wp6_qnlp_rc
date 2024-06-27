@@ -200,13 +200,13 @@ The core model is defined in the file `beta_2_3_model.py`.
 ##### Dataset formatting
 To run Beta 2, you must have a dataset in CSV format consisting of 3 columns:
  
-* 'class' - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
+* `class` - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
 
-* 'sentence' - this column will contain the natural language sentences that will be classified by the model.
+* `sentence` - this column will contain the natural language sentences that will be classified by the model.
 
-* 'reduced_embedding' - this column will contain the reduced fastText embeddings in standard vector format, i.e. [a,b,...,z]
+* `reduced_embedding` - this column will contain the reduced fastText embeddings in standard vector format, i.e. [a,b,...,z]
 
-Assuming you have a CSV file with the first two columns, if you want to generate the reduced fastText embeddings and add them to a new 'reduced_embedding' column, you can use our [generate_fasttext_dataset.py](/neasqc_wp61/data/data_processing/generate_fasttext_dataset.py) script. Simply open the file, edit line 7 with the path to your CSV file, edit line 25 with your desired output path, then save and close. From the root of the repo do:
+Assuming you have a CSV file with the first two columns, if you want to generate the reduced fastText embeddings and add them to a new `reduced_embedding` column, you can use our `generate_fasttext_dataset.py` script. Simply open the file, edit line 7 with the path to your CSV file, edit line 25 with your desired output path, then save and close. From the root of the repo do:
 ```
 cd neasqc_wp61/data/data_processing/
 ```
@@ -251,7 +251,7 @@ The trainer file is `beta_2_3_trainer.py` and pipeline `use_beta_2_3.py`.
 For the cross-validation version, you want the same columns as above, plus the following:
 * 'split' - this column contains numbers in the range [0, K-1] where K is the number of folds in the cross-validation proceedure. This number will indicate what split the data belongs to.
 
-If you have a dataset with the 'class', 'split' and 'sentence' column, and want to vectorise the sentences using fastText and add the result embeddings in a new 'reduced_embedding' column, you can use [generate_fasttext_dataset.py](/neasqc_wp61/data/data_processing/generate_fasttext_dataset.py) as described in the previous subsection.
+If you have a dataset with the `class`, `split` and `sentence` column, and want to vectorise the sentences using fastText and add the result embeddings in a new 'reduced_embedding' column, you can use `generate_fasttext_dataset.py` as described in the previous subsection.
 
 ##### Cross-validation example
 1. From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
