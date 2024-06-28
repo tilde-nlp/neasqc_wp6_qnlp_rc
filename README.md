@@ -88,7 +88,7 @@ The core of the model is defined in 'alpha_3_multiclass_model.py'. There are two
 #### Standard example usage
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
-* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass_tests -t <path to train data>  -v <path to test data> -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
+* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass_tests -t PATH_TO_TRAIN  -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
 Note that the trainer file is `neasqc_wp61/models/quantum/alpha/module/alpha_3_multiclass_trainer_tests.py` and the pipeline is `neasqc_wp61/data/data_processing/use_alpha_3_multiclass_tests.py`.
 
 #### Cross-validation usage
@@ -100,7 +100,7 @@ This assumes the dataset is formatted as per standard Alpha3 format and with one
 
 ##### Cross-validation example
 * From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
-* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass -f <path to split train and validation data>  -v <path to test data> -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
+* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
 
 
 
@@ -115,7 +115,7 @@ The Beta 2 model architecture is defined in `neasqc_wp61/models/quantum/beta_2_3
 #### Standard example usage
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
-* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f <path to train dataset> -v <path to test dataset> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
+* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 Note that the trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py` and the pipeline `neasqc_wp61/data/data_processing/use_beta_2_3_tests.py`.
 
 ##### TO REMOVE LATER
@@ -140,7 +140,7 @@ For the test dataset, you do not need the `split` columns, and you can use the `
 
 ##### Cross-validation example
 * From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
-* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_2 -f <path to split train and validation data>  -v <path to test data> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
+* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_2 -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 
 
 
@@ -151,7 +151,7 @@ Beta3 is simply a different flavour of Beta2. Here, the vector used as input to 
 The trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py` and pipeline `neasqc_wp61/data/data_processing/use_beta_2_3_tests.py`.
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
-* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_3_tests -f <path to train dataset> -v <path to test dataset> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
+* Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_3_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 Trainer and pipeline are the same as for Beta2.
 
 
@@ -168,5 +168,5 @@ If you have a dataset with the `class`, `split` and `sentence` column, and want 
 1. From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
 2. Use the following command:
 ```
-bash 6_Classify_With_Quantum_Model.sh -m beta_3 -f <path to split train and validation data>  -v <path to test data> -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+bash 6_Classify_With_Quantum_Model.sh -m beta_3 -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 ```
