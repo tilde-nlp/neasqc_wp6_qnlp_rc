@@ -46,21 +46,21 @@ echo "optimiser: $optimiser";
 echo "iterations: $iterations";
 echo "outfile: $outfile";
 echo "ansatz: $ansatz";
-echo "Number of qubits per noun: $qn";
+echo "number of qubits per noun: $qn";
 echo "number of circuit layers: $nl";
-echo ":number of single qubit parameters $np";
+echo "number of single qubit parameters $np";
 
-echo "Number of qubits in our circuit: $nq";
-echo "Initial spread of the parameters: $qd";
-echo "Batch size: $b";
-echo "Learning rate: $lr";
-echo "Weight decay: $wd";
-echo "Step size for the learning rate scheduler: $slr";
-echo "Gamma for the learning rate scheduler: $g";
+echo "number of qubits in our circuit: $nq";
+echo "initial spread of the parameters: $qd";
+echo "batch size: $b";
+echo "learning rate: $lr";
+echo "weight decay: $wd";
+echo "step size for the learning rate scheduler: $slr";
+echo "gamma for learning rate scheduler: $g";
 
-echo "Version between alpha_1 and alpha_2: $version";
-echo "Reduced dimension for the word embeddings: $pca";
-echo "Number of qubits per SENTENCE type: $qs";
+echo "version between alpha_1 and alpha_2: $version";
+echo "reduced dimension for the word embeddings: $pca";
+echo "number of qubits per SENTENCE type: $qs";
 
 
 
