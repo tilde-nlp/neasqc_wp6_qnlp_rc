@@ -1,5 +1,8 @@
 # Quantum Natural Language Processing : NEASQC WP 6.1
 
+## Overview
+This readme gives a brief introduction to the models presented in the NEASQC work-package 6.1 on quantum natural lnaguage processing and provides guidance on how to run each model.
+
 ## Pre-setup
 The following guide will walk you thorugh how to use our models. Prior to following those steps, you should ensure that you:
 - Have a copy of the repository on your local machine.
@@ -23,6 +26,23 @@ Note that each model takes in a different input, but all produce the same output
 * A `.pt` file for each run with the final weights of the model at the end of the run.
 
 Note that all models follow the same file structure. They are divided into models, trainers and pipeline files to run.
+
+### Model arguments
+When launching training of a model, the following parameters must be specified as command line arguments.
+* `-s` : an integer seed for result replication.
+* `-i` : the number of iterations (epochs) for the training of the model.
+* `-r` : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
+* `-u` : the number of qubits of the fully-connected quantum circuit
+* `-d` : q_delta, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
+* `-p` : the <code>PyTorch</code> optimiser of choice.
+* `-b` : the batch size.
+* `-l` : the learning rate for the optimiser.
+* `-w` : the weight decay (this can be set to 0).
+* `-z` : the step size for the learning rate scheduler.
+* `-g` : the gamma for the learning rate scheduler.
+* `-o` : path for the output file.
+* `-v` : the path to the test dataset.
+* `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
 
 
 
@@ -52,28 +72,9 @@ python dataset_vectoriser.py <path-to-your-csv-dataset> -e sentence
 ```
 This will produce a new CSV file identical to your dataset but with an additional column 'sentence_embedding' containing the embeddings for each sentence. This file will be saved to the same directory in which your dataset lives.
 
-##### Command line arguments
-The model has a number of parameters that must be specified through flags in the command line. These are:
-* `-s` : an integer seed for result replication.
-* `-i` : the number of iterations (epochs) for the training of the model.
-* `-r` : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
-* `-u` : the number of qubits of the fully-connected quantum circuit
-* `-d` : q_delta, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
-* `-p` : the <code>PyTorch</code> optimiser of choice.
-* `-b` : the batch size.
-* `-l`: the learning rate for the optimiser.
-* `-w` : the weight decay (this can be set to 0).
-* `-z` : the step size for the learning rate scheduler.
-* `-g` : the gamma for the learning rate scheduler.
-* `-o` : path for the output file.
-
 
 #### Standard usage
 The **standard** usage can be found in `alpha_3_multiclass_tests`. The trainer file is `alpha_3_multiclass_trainer_tests.py` and the pipeline is `use_alpha_3_multiclass_tests.py`.
-
-##### Additional command line arguments for standard usage
-* `-t` : the path to the training dataset.
-* `-v` : the path to the test dataset.
 
 ##### Standard example
 1. From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
@@ -90,10 +91,6 @@ The k-fold usage can be found in `alpha_3_multiclass`. The trainer file is `alph
 
 ##### Dataset formatting for cross-validation
 This assumes the dataset is formatted as per standard Alpha3 format and with one additional column: `split`. The 'split' column contains numbers that indicate the split to which the sentence belongs to. For K-fold cross-validation, these numbers should be in the range [0, K-1]. Once this column is present you can run the `dataset_vectoriser.py` script as per above.
-
-##### Additional command line arguments for cross-validation usage
-* `-f` : path to the dataset containing the training and validation data with the split information as detailed before.
-* `-v` : path to the test dataset.
 
 ##### Cross-validation example
 1. From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
@@ -133,23 +130,6 @@ python generate_pca_test_dataset.py
 ```
 This will produce a new CSV file with the additional 'reduced_embedding' column. Make sure to do this both for your traing and testing datasets. 
 
-##### Command line arguments
-The model has a number of parameters that must be specified through flags in the command line. These are:
-
-* `-s` : an integer seed for result replication.
-* `-i` : the number of iterations (epochs) for the training of the model.
-* `-r` : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
-* `-u` : the number of qubits of the fully-connected quantum circuit
-* `-d` : q_delta, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
-* `-p` : the <code>PyTorch</code> optimiser of choice.
-* `-b` : the batch size.
-* `-l` : the learning rate for the optimiser.
-* `-w` : the weight decay (this can be set to 0).
-* `-z` : the step size for the learning rate scheduler.
-* `-g` : the gamma for the learning rate scheduler.
-* `-o` : path for the output file.
-* `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
-* `-v` : the path to the test dataset.
 
 #### Standard usage
 The trainer file is `beta_2_3_trainer_tests.py` and the pipeline `use_beta_2_3_tests.py`.
@@ -217,24 +197,6 @@ and then run the script:
 python generate_fasttext_dataset.py
 ```
 which will generate a new CSV file with the fastText embeddings in the 'reduced_embedding' column. Make sure to do this both for your training and testing datasets.
-
-##### Command line arguments
-The model has a number of parameters that must be specified through flags in the command line. These are:
-
-* `-s` : an integer seed for result replication.
-* `-i` : the number of iterations (epochs) for the training of the model.
-* `-r` : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
-* `-u` : the number of qubits of the fully-connected quantum circuit
-* `-d` : q_delta, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
-* `-p` : the <code>PyTorch</code> optimiser of choice.
-* `-b` : the batch size.
-* `-l` : the learning rate for the optimiser.
-* `-w` : the weight decay (this can be set to 0).
-* `-z` : the step size for the learning rate scheduler.
-* `-g` : the gamma for the learning rate scheduler.
-* `-o` : path for the output file.
-* `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
-* `-v` : the path to the test dataset.
 
 #### Standard usage
 The trainer file is `beta_2_3_trainer_tests.py` and pipeline `use_beta_2_3_tests.py`.
