@@ -26,6 +26,6 @@ df_train["reduced_embedding"] = reduced_embeddings_train.tolist()
 
 #NOTE: desired output file directory/location goes here
 df_test.to_csv("../datasets/agnews_balanced_test_bert_pca.csv", index=False)
-df_train.to_csv("../datasets/agnews_balanced_test_bert_pca.csv", index=False)
+df_train.to_csv("../datasets/agnews_balanced_train_bert_pca.csv", index=False)
 
 
