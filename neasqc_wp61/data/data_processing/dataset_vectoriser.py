@@ -48,7 +48,7 @@ def vectorise(dataset, embedding):
             )
 
         dftrain["sentence_embedding"] = sentence_embedding_list
-        dftrain.to_csv(
+        dftrain.to_csv( #NOTE: change desired output file name?
             directory + "/" + file_name.split(".")[0] + "_sentence_bert.csv",
             index=False,
         )
