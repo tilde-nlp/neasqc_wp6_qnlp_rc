@@ -13,8 +13,8 @@ Prior to following any further steps, you should ensure that you:
 ### Getting started
 1. Position yourself in the `dev` branch.
 2. Position yourself in the root of the repository where the files `pyproject.toml` and `poetry.lock` are located.
-3. Run <pre><code>$ poetry install</pre></code>.
-4. Activate `poetry` using <pre><code>poetry shell</code></pre>. More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
+3. Run <pre><code>$ poetry install</pre></code>
+4. Activate `poetry` using <pre><code>poetry shell</code></pre> More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
 
 ### Datasets
 Note: as long as the formating is respected, users will be able to use our models on any dataset they like. Here for simplicity we assume datasets are placed in `neasqc_wp61/data/datasets`. The datasets we used can be found [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/v2-classical-nlp-models/neasqc_wp61/data/datasets). Please note that to use these yourself you will need to add the `class` and `sentence` column headers and convert the format to `csv`.
@@ -42,30 +42,51 @@ When launching training of a model, the following parameters must be specified a
 * `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
 
 
+### Dataset formatting
+In order to be compatible with our models, please ensure your dataset:
+- Is in `CSV` format.
+- Contains the following columns:
+  - `sentence` (string) - the natural language utterance to be classified by the model.
+  - `class` (integer) - the class of the sentence. Numbers should be in the range [0, K-1] where K is the total number of classes.
+  - `sentence_embedding` (vector of floats) - the vector representation of the sentence obtained using some embedding (BERT, ember-v1 or other).
+
+#### Generating and populating an embedding column
+If your dataset contains only `sentence` and `class` columns but is devoide of an `embedding` one, we provide the `dataset_vectoriser.py` script to generate a BERT embedding.
+* Position yourself at the root of the repository.
+* Navigate to the location of the script by using <pre><code>$ cd neasqc_wp61/data/data_processing/ </pre></code>
+* Run the script using <pre><code>$ python dataset_vectoriser.py PATH_TO_DATASET -e sentence </pre></code> where `PATH_TO_DATASET` is replaced by the path to your dataset.
+This will produce a new `CSV` file identical to your dataset but with an additional column 'sentence_embedding' containing the embeddings for each sentence. This file will be saved to the directory where your original dataset is located.
+
+#### Generating and populating a reduced embedding column 
+For Beta models only. An extra `reduced_embedding` column is needed. It will contain a compressed version of the `embedding` of a small enough dimensionality to be used as input to a quantum circuit. The compression method will depend on the model used.
+
+#### Generating Beta2 `reduced_embedding` column
+Assuming your dataset already contains the basic 3 columns mentionned above, you can create a `reduced_embedding` column for Beta2.
+
+##### For the *standard* use of Beta2
+* Modify the input and output paths in `neasqc_wp61/data/data_processing/generate_pca_test_dataset.py` to your desired input and output paths.
+* Position yourself at the root of the repository.
+* Navigate to the location of the script by using <pre><code>$ cd neasqc_wp61/data/data_processing/ </pre></code>
+* Run <pre><code>$ python generate_pca_test_dataset.py </pre></code>
+This will produce a new CSV file with the additional 'reduced_embedding' column. Make sure to do this both for your traing and testing datasets.
+
+#### Generating Beta3 `reduced_embedding` column
+
+##### For the *standard* use of Beta3
+* Modify the input and output paths in `neasqc_wp61/data/data_processing/generate_fasttext_dataset.py` to your desired input and output paths.
+* Position yourself at the root of the repository.
+* Navigate to the location of the script by using <pre><code>$ cd neasqc_wp61/data/data_processing/ </pre></code>
+* Run <pre><code>$ python generate_fasttext_dataset.py </pre></code>
+This will produce a new CSV file with the additional 'reduced_embedding' column. Make sure to do this both for your traing and testing datasets.
+which will generate a new CSV file with the fastText embeddings in the 'reduced_embedding' column. Make sure to do this both for your training and testing datasets.
+
+
+
 
 ## Alpha3
 Alpha3 follows a dressed quantum circuit (DQC) architecture, meaning that it combines a classical network architecture with a quantum circuit. A fully-connected quantum circuit is sandwiched between linear layers. This model performs multiclass classification of natural language data. The first classical layer takes in sentence embeddings of dimension D and reduces them to an output of dimension N where N is the number of qubits of the circuit. The second classical takes the output of the quantum circuit as input (a vector of dimension N), and outputs a vector of dimension K, where K is the number of classes. The final prediction of the class is made from this vector.
 
 The core of the model is defined in 'alpha_3_multiclass_model.py'. There are two ways to use this model, the **standard** way which relies on training the model on a *single* training dataset and evaluation it on a validation dataset, and the k-fold validation one. Each option has an model, trainer and pipeline file which straps them together.
-
-##### Dataset formatting
-For Alpha3, the dataset must be:
-
-- In CSV format
-- With 3 columns:
-  * 'class' - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
-  * 'sentence' - this column will contain the natural language sentences that will be classified by the model.
-  * 'sentence_embedding' - this column will contain the sentence embeddings (e.g. BERT, ember-v1, etc.) corresponding to each sentence. The embeddings should be in standard list/vector notation format, e.g. [a,b,...,z].
-
-If you have a CSV file with 'class' and 'sentence' labels, and you want to add a column with the corresponding BERT embeddings, you may use our `dataset_vectoriser.py` script. From the root of the repo do:
-```
-cd neasqc_wp61/data/data_processing/
-```
-and then run the script:
-```
-python dataset_vectoriser.py <path-to-your-csv-dataset> -e sentence
-```
-This will produce a new CSV file identical to your dataset but with an additional column 'sentence_embedding' containing the embeddings for each sentence. This file will be saved to the same directory in which your dataset lives.
 
 
 #### Standard usage
@@ -77,8 +98,6 @@ The **standard** usage can be found in `alpha_3_multiclass_tests`. The trainer f
 ```
 bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass_tests -t <path to train data>  -v <path to test data> -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/
 ```
-
-
 
 #### Cross-validation usage
 In the k-fold validation use, input sentences are labelled with their corresponding split. For each split S, the the training dataset will be all other splits and the given split S will be used as validation.
@@ -102,7 +121,7 @@ Beta 2 follows what we call a *semi-dressed quantum circuit* (SDQC) architecture
 
 The Beta 2 model architecture is defined in the `beta_2_3_model.py` file. Note here that Beta3, given its very minor deviation from Beta2, is defined in the same file. See next section for more details on Beta3.
 
-##### Dataset formatting
+##### Dataset formatting Beta2
 To run Beta 2, you must have a dataset in CSV format consisting of 4 columns:
  
 * `class` - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
@@ -170,7 +189,7 @@ bash 6_Classify_With_Quantum_Model.sh -m beta_2 -f <path to split train and vali
 Beta3 is simply a different flavour of Beta2. Here, the vector used as input to the PQC is obtained from an adaptive-sized embedding instead of via a PCA.
 The core model is defined in the file `beta_2_3_model.py`.
 
-##### Dataset formatting
+##### Dataset formatting Beta3
 To run Beta 2, you must have a dataset in CSV format consisting of 3 columns:
  
 * `class` - this column will contain the numbers that represents the class of each sentence (e.g. in binary classification, this could be 0 for a negative sentence, and 1 for a positive one). The numbers should be in the range [0, C-1] where C is the total number of classes.
