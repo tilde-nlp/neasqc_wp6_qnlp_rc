@@ -1,31 +1,28 @@
 # Quantum Natural Language Processing : NEASQC WP 6.1
-
-## Overview
 This readme gives a brief introduction to the models presented in the NEASQC work-package 6.1 on quantum natural lnaguage processing and provides guidance on how to run each model.
 
-## Pre-setup
-The following guide will walk you thorugh how to use our models. Prior to following those steps, you should ensure that you:
+## Setup
+The following guide will walk you though how to use our models.
+
+### Pre-requisites
+Prior to following any further steps, you should ensure that you:
 - Have a copy of the repository on your local machine.
 - Have `python 3.10` installed on your local machine. Our models *might* turn out to be compatible with later versions of python but they were designed with and intended for 3.10.
 - Have `poetry` installed on your local machine. You can follow the instructions on <a href="https://python-poetry.org/docs/#installation">the official website</a>.
 
-## Setup
+### Getting started
 1. Position yourself in the `dev` branch.
-2. Position yourself in the root of the repository where the files <code>pyproject.toml</code> and <code>poetry.lock</code> are located.
-3. Run the command: <pre><code>$ poetry install</pre></code>. If you also want to install the dependencies to build `sphinx` documentation, use the command <pre><code>poetry install --with docs</pre></code> instead.
-4. Activate the `poetry` usibg the command: <pre><code>poetry shell</code></pre>. More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
+2. Position yourself in the root of the repository where the files `pyproject.toml` and `poetry.lock` are located.
+3. Run <pre><code>$ poetry install</pre></code>.
+4. Activate `poetry` using <pre><code>poetry shell</code></pre>. More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
 
+### Datasets
 Note: as long as the formating is respected, users will be able to use our models on any dataset they like. Here for simplicity we assume datasets are placed in `neasqc_wp61/data/datasets`. The datasets we used can be found [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/v2-classical-nlp-models/neasqc_wp61/data/datasets). Please note that to use these yourself you will need to add the `class` and `sentence` column headers and convert the format to `csv`.
 
-
-## Models
-In this section we present our main models - Alpha 3, Beta 2 and Beta 3. 
-
-Note that each model takes in a different input, but all produce the same output: 
+### Models output
+Every model produces the same output:
 * A `JSON` file containing the details of all the runs (loss, accuracy, runtime, etc.)
 * A `.pt` file for each run with the final weights of the model at the end of the run.
-
-Note that all models follow the same file structure. They are divided into models, trainers and pipeline files to run.
 
 ### Model arguments
 When launching training of a model, the following parameters must be specified as command line arguments.
@@ -46,9 +43,7 @@ When launching training of a model, the following parameters must be specified a
 
 
 
-### Alpha3
-
-####  General overview
+## Alpha3
 Alpha3 follows a dressed quantum circuit (DQC) architecture, meaning that it combines a classical network architecture with a quantum circuit. A fully-connected quantum circuit is sandwiched between linear layers. This model performs multiclass classification of natural language data. The first classical layer takes in sentence embeddings of dimension D and reduces them to an output of dimension N where N is the number of qubits of the circuit. The second classical takes the output of the quantum circuit as input (a vector of dimension N), and outputs a vector of dimension K, where K is the number of classes. The final prediction of the class is made from this vector.
 
 The core of the model is defined in 'alpha_3_multiclass_model.py'. There are two ways to use this model, the **standard** way which relies on training the model on a *single* training dataset and evaluation it on a validation dataset, and the k-fold validation one. Each option has an model, trainer and pipeline file which straps them together.
@@ -102,9 +97,7 @@ bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass -f <path to split tr
 
 
 
-### Beta 2 
-
-#### General overview
+## Beta 2 
 Beta 2 follows what we call a *semi-dressed quantum circuit* (SDQC) architecture. Here, the first layer of a DQC is stripped and the classical input in handed directly to the PQC once it has been brought to the correct dimension. The input to the circuit is a PCA-reduced sentence embedding, i.e. a vector of size N where N is the number of qubits in the quantum circuit. One starts with a sentence embedding of dimension D, reduces its dimension to N using a PCA, and this resulting vector is plugged into the quantum circuit. The advantage of this model is that it relies more heavily on quantum elements as compared with a DQC.
 
 The Beta 2 model architecture is defined in the `beta_2_3_model.py` file. Note here that Beta3, given its very minor deviation from Beta2, is defined in the same file. See next section for more details on Beta3.
@@ -173,9 +166,7 @@ bash 6_Classify_With_Quantum_Model.sh -m beta_2 -f <path to split train and vali
 
 
 
-### Beta3
-
-#### General overview
+## Beta3
 Beta3 is simply a different flavour of Beta2. Here, the vector used as input to the PQC is obtained from an adaptive-sized embedding instead of via a PCA.
 The core model is defined in the file `beta_2_3_model.py`.
 
