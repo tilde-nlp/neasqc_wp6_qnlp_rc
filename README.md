@@ -98,6 +98,9 @@ The core of the model is defined in `alpha_3_multiclass_model.py`. There are two
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
 * Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass_tests -t PATH_TO_TRAIN  -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
 Note that the trainer file is `neasqc_wp61/models/quantum/alpha/module/alpha_3_multiclass_trainer_tests.py` and the pipeline is `neasqc_wp61/data/data_processing/use_alpha_3_multiclass_tests.py`.
+<!--- Runs... but are they the right files?
+bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass_tests -t data/datasets/agnews_balanced_test_bert_pca.csv  -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/
+--->
 
 
 ### Cross-validation usage
@@ -126,7 +129,7 @@ The Beta 2 model architecture is defined in `neasqc_wp61/models/quantum/beta_2_3
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
 * Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 Note that the trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py` and the pipeline `neasqc_wp61/data/data_processing/use_beta_2_3_tests.py`.
-<!---
+<!--- Runs... but are they the right files?
 bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f data/datasets/agnews_balanced_test_bert_pca.csv -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 --->
 
@@ -165,6 +168,9 @@ The trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
 * Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_3_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 Trainer and pipeline are the same as for Beta2.
+<!--- Runs... but are they the right files?
+bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f data/datasets/agnews_balanced_test_bert_pca.csv -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+--->
 
 
 ### Cross-validation usage
