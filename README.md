@@ -1,7 +1,12 @@
 # Quantum Natural Language Processing : NEASQC WP 6.1
 This readme gives a brief introduction to the models presented in the NEASQC work-package 6.1 on quantum natural language processing and provides guidance on how to run each model. We give a brief overview of each of the three models here: Alpha3, Beta2 and Beta3, but encourage users to refer to the corresponding report containing an extended abstract presenting the models more in depth.
 
+
+
+
+
 ## Setup
+
 
 ### Pre-requisites
 Prior to following any steps, you should ensure that you have on your local machine and readily available:
@@ -9,11 +14,13 @@ Prior to following any steps, you should ensure that you have on your local mach
 - `python 3.10`, our models *might* turn out to be compatible with later versions of python but they were designed with and intended for 3.10.
 - `poetry`, you can follow the instructions if needed on <a href="https://python-poetry.org/docs/#installation">the official website</a>.
 
+
 ### Getting started
 1. Position yourself in the `final_main` branch.
 2. Position yourself in the root of the repository where the files `pyproject.toml` and `poetry.lock` are located.
 3. Run <pre><code>poetry install</pre></code>
 4. Activate `poetry` using <pre><code>poetry shell</code></pre> More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
+
 
 ### Models use
 
@@ -38,6 +45,7 @@ When launching the training of a model, the following parameters must be specifi
 * `-o` : path for the output file.
 * `-v` : the path to the test dataset.
 * `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
+
 
 ### Datasets
 For simplicity we assume datasets are placed in `neasqc_wp61/data/datasets`. The datasets we used can be found [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/v2-classical-nlp-models/neasqc_wp61/data/datasets). Please note that to use these yourself you will need to add the `class` and `sentence` column headers and convert the format to `.csv`.
@@ -80,25 +88,26 @@ which will generate a new CSV file with the fastText embeddings in the 'reduced_
 
 
 ## Alpha3
-Alpha3 follows a dressed quantum circuit (DQC) architecture, meaning that it combines a classical network architecture with a quantum circuit. A fully-connected quantum circuit is sandwiched between linear layers. This model performs multiclass classification of natural language data. The first classical layer takes in sentence embeddings of dimension D and reduces them to an output of dimension N where N is the number of qubits of the circuit. The second classical takes the output of the quantum circuit as input (a vector of dimension N), and outputs a vector of dimension K, where K is the number of classes. The final prediction of the class is made from this vector.
+Alpha3 follows a dressed quantum circuit (DQC) architecture, meaning that it combines a classical network architecture with a quantum circuit. A fully-connected quantum circuit is *sandwiched* between classical linear layers. This model performs multiclass classification of natural language data. The first classical layer takes in sentence embeddings of dimension D and reduces them to an output of dimension N where N is the number of qubits of the circuit. The second classical layer takes the output of the quantum circuit as input (a vector of dimension N), and outputs a vector of dimension K, where K is the number of classes. The final prediction of the class is made from this vector.
 
-The core of the model is defined in 'alpha_3_multiclass_model.py'. There are two ways to use this model, the **standard** way which relies on training the model on a *single* training dataset and evaluation it on a validation dataset, and the k-fold validation one. Each option has an model, trainer and pipeline file which straps them together.
+The core of the model is defined in `alpha_3_multiclass_model.py`. There are two ways to use this model, the **standard** way which relies on training the model on a *single* training dataset and evaluation it on a validation dataset, and the k-fold validation one. Each option has an model, trainer and pipeline file which ties them together.
 
 
-#### Standard example usage
+### Standard example usage
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
 * Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass_tests -t PATH_TO_TRAIN  -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
 Note that the trainer file is `neasqc_wp61/models/quantum/alpha/module/alpha_3_multiclass_trainer_tests.py` and the pipeline is `neasqc_wp61/data/data_processing/use_alpha_3_multiclass_tests.py`.
 
-#### Cross-validation usage
+
+### Cross-validation usage
 In the k-fold validation use, input sentences are labelled with their corresponding split. For each split S, the the training dataset will be all other splits and the given split S will be used as validation.
 The k-fold usage can be found in `alpha_3_multiclass`. The trainer file is `alpha_3_multiclass_trainer.py` and the pipeline file is `use_alpha_3_multiclass.py`.
 
-##### Dataset formatting for cross-validation
-This assumes the dataset is formatted as per standard Alpha3 format and with one additional column: `split`. The 'split' column contains numbers that indicate the split to which the sentence belongs to. For K-fold cross-validation, these numbers should be in the range [0, K-1]. Once this column is present you can run the `dataset_vectoriser.py` script as per above.
+#### Dataset formatting for cross-validation
+This assumes the dataset is formatted as per standard Alpha3 format and with one additional column: `split`. The `split` column contains numbers that indicate the split to which the sentence belongs to. For K-fold cross-validation, these numbers should be in the range [0, K-1]. Once this column is present you can run the `dataset_vectoriser.py` script.
 
-##### Cross-validation example
+#### Cross-validation example
 * From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
 * Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m alpha_3_multiclass -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
 
@@ -107,24 +116,25 @@ This assumes the dataset is formatted as per standard Alpha3 format and with one
 
 
 ## Beta 2 
-Beta 2 follows what we call a *semi-dressed quantum circuit* (SDQC) architecture. Here, the first layer of a DQC is stripped and the classical input in handed directly to the PQC once it has been brought to the correct dimension. The input to the circuit is a PCA-reduced sentence embedding, i.e. a vector of size N where N is the number of qubits in the quantum circuit. One starts with a sentence embedding of dimension D, reduces its dimension to N using a PCA, and this resulting vector is plugged into the quantum circuit. The advantage of this model is that it relies more heavily on quantum elements as compared with a DQC.
+Beta 2 follows what we call a *semi-dressed quantum circuit* (SDQC) architecture. Here, the first layer of a DQC is stripped. The classical input is handed directly to the PQC once it has been brought to the correct dimension. The input to the circuit is a PCA-reduced sentence embedding, i.e. a vector of size N where N is the number of qubits in the quantum circuit. One starts with a sentence embedding of dimension D, reduces its dimension to N using a PCA, and this resulting vector is plugged into the quantum circuit. The advantage of this model is that it relies more heavily on quantum elements as compared with a DQC.
 
 The Beta 2 model architecture is defined in `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_model.py`. Note here that Beta3, given its very minor deviation from Beta2, is defined in the same file. See next section for more details on Beta3.
 
 
-#### Standard example usage
+### Standard example usage
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
 * Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 Note that the trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py` and the pipeline `neasqc_wp61/data/data_processing/use_beta_2_3_tests.py`.
-
-##### TO REMOVE LATER
+<!---
 bash 6_Classify_With_Quantum_Model.sh -m beta_2_tests -f data/datasets/agnews_balanced_test_bert_pca.csv -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+--->
 
-#### Cross-validation usage
+
+### Cross-validation usage
 The trainer file is `beta_2_3_trainer.py` and the pipeline `use_beta_2_3.py`.
 
-##### Dataset formatting for cross-validation
+#### Dataset formatting for cross-validation
 Ensure that your dataset (with the train and validation data) has an additional column: 'split'. This column contains numbers that indicate the split to which the sentence belongs to. For K-fold cross-validation, these numbers should be in the range [0, K-1]
 Once this is done, you need an addtional set of columns: `reduced_embedding_i`. These columns contain the PCA-reduced embeddings, with `i` indicating that the embeddings have been reduced with a PCA that has been fitted on the training data for split `i` (that is, all splits *different from* i). If you have a dataset with all other columns, these columns are easy to add using our `generate_pca_dataset.py` script. 
 Simply open the script, edit line 5 to include the path to your dataset containing the train and validation data, and edit line 30 with your desired output file path and name. Then save and close. From the root of the repository do:
@@ -138,7 +148,7 @@ python generate_pca_dataset.py
 This will produce a CSV file in the desired output path with the required format and columns.
 For the test dataset, you do not need the `split` columns, and you can use the `generate_pca_test_dataset.py` script, which is described in the previous section, to reduce the embeddings in the `sentence_embedding` column and add them to a new `reduced_embedding` column.
 
-##### Cross-validation example
+#### Cross-validation example
 * From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
 * Run <pre><code> bash 6_Classify_With_Quantum_Model.sh -m beta_2 -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -s 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 
@@ -147,7 +157,9 @@ For the test dataset, you do not need the `split` columns, and you can use the `
 
 ## Beta3
 Beta3 is simply a different flavour of Beta2. Here, the vector used as input to the PQC is obtained from an adaptive-sized embedding instead of via a PCA. The core model is defined in the same file as Beta2.
-#### Standard example usage
+
+
+### Standard example usage
 The trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py` and pipeline `neasqc_wp61/data/data_processing/use_beta_2_3_tests.py`.
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
@@ -155,16 +167,16 @@ The trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.
 Trainer and pipeline are the same as for Beta2.
 
 
-#### Cross-validation usage
+### Cross-validation usage
 The trainer file is `beta_2_3_trainer.py` and pipeline `use_beta_2_3.py`.
 
-##### Dataset formatting for cross-validation
+#### Dataset formatting for cross-validation
 For the cross-validation version, you want the same columns as above, plus the following:
 * 'split' - this column contains numbers in the range [0, K-1] where K is the number of folds in the cross-validation proceedure. This number will indicate what split the data belongs to.
 
 If you have a dataset with the `class`, `split` and `sentence` column, and want to vectorise the sentences using fastText and add the result embeddings in a new 'reduced_embedding' column, you can use `generate_fasttext_dataset.py` as described in the previous subsection.
 
-##### Cross-validation example
+#### Cross-validation example
 1. From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
 2. Use the following command:
 ```
