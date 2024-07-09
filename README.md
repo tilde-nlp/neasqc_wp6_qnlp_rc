@@ -1,31 +1,29 @@
 # Quantum Natural Language Processing : NEASQC WP 6.1
-This readme gives a brief introduction to the models presented in the NEASQC work-package 6.1 on quantum natural lnaguage processing and provides guidance on how to run each model.
+This readme gives a brief introduction to the models presented in the NEASQC work-package 6.1 on quantum natural lnaguage processing and provides guidance on how to run each model. We give a brief overview of each of the three models here: Alpha3, Beta2 and Beta3, but encourage users to refer to the corresponding report containing an extended abstract presenting the models more in depth.
 
 ## Setup
-The following guide will walk you though how to use our models.
 
 ### Pre-requisites
-Prior to following any further steps, you should ensure that you:
-- Have a copy of the repository on your local machine.
-- Have `python 3.10` available on your local machine. Our models *might* turn out to be compatible with later versions of python but they were designed with and intended for 3.10.
-- Have `poetry` installed on your local machine. You can follow the instructions on <a href="https://python-poetry.org/docs/#installation">the official website</a>.
+Prior to following any steps, you should ensure that you have on your local machine and readily available:
+- A copy of the repository.
+- `python 3.10`, our models *might* turn out to be compatible with later versions of python but they were designed with and intended for 3.10.
+- `poetry`, you can follow the instructions if needed on <a href="https://python-poetry.org/docs/#installation">the official website</a>.
 
 ### Getting started
-1. Position yourself in the `dev` branch.
+1. Position yourself in the `final_main` branch.
 2. Position yourself in the root of the repository where the files `pyproject.toml` and `poetry.lock` are located.
 3. Run <pre><code>poetry install</pre></code>
 4. Activate `poetry` using <pre><code>poetry shell</code></pre> More details can be found <a href="https://python-poetry.org/docs/basic-usage/#using-your-virtual-environment">here</a>.
 
-### Datasets
-For simplicity we assume datasets are placed in `neasqc_wp61/data/datasets`. The datasets we used can be found [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/v2-classical-nlp-models/neasqc_wp61/data/datasets). Please note that to use these yourself you will need to add the `class` and `sentence` column headers and convert the format to `.csv`.
+### Models use
 
-### Models output
+#### Models outputs
 Every model produces the same output:
 * A `JSON` file containing the details of all the runs (loss, accuracy, runtime, etc.)
 * A `.pt` file for each run with the final weights of the model at the end of the run.
 
-### Model arguments
-When launching training of a model, the following parameters must be specified as command line arguments.
+#### Models arguments
+When launching the training of a model, the following parameters must be specified as command line arguments.
 * `-s` : an integer seed for result replication.
 * `-i` : the number of iterations (epochs) for the training of the model.
 * `-r` : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
@@ -41,8 +39,10 @@ When launching training of a model, the following parameters must be specified a
 * `-v` : the path to the test dataset.
 * `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
 
+### Datasets
+For simplicity we assume datasets are placed in `neasqc_wp61/data/datasets`. The datasets we used can be found [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/v2-classical-nlp-models/neasqc_wp61/data/datasets). Please note that to use these yourself you will need to add the `class` and `sentence` column headers and convert the format to `.csv`.
 
-### Dataset formatting
+#### Dataset formatting
 In order to be compatible with our models, please ensure your dataset:
 - Is in `CSV` format.
 - Contains the following columns:
@@ -50,25 +50,25 @@ In order to be compatible with our models, please ensure your dataset:
   - `class` (integer) - the class of the sentence. Numbers should be in the range [0, K-1] where K is the total number of classes.
   - `sentence_embedding` (vector of floats) - the vector representation of the sentence obtained using some embedding (BERT, ember-v1 or other).
 
-#### Generating and populating an embedding column (all models)
+##### Generating and populating an embedding column (all models)
 If your dataset contains only `sentence` and `class` columns but is devoide of an `embedding` one, we provide the `dataset_vectoriser.py` script to generate a BERT embedding.
 * Position yourself at the root of the repository.
 * Navigate to the location of the script by using <pre><code>cd neasqc_wp61/data/data_processing/ </pre></code>
 * Run the script using <pre><code>python dataset_vectoriser.py PATH_TO_DATASET -e sentence </pre></code> where `PATH_TO_DATASET` is replaced by the path to your dataset.
 This will produce a new `CSV` file identical to your dataset but with an additional column 'sentence_embedding' containing the embeddings for each sentence. This file will be saved to the directory where your original dataset is located.
 
-#### Generating and populating a reduced embedding column (Beta models only)
+##### Generating and populating a reduced embedding column (Beta models only)
 An extra `reduced_embedding` column is needed. It will contain a compressed version of the `embedding` of a small enough dimensionality to be used as input to a quantum circuit. The compression method will depend on the model used.
 Assuming your dataset already contains the basic 3 columns mentionned above, you can create a `reduced_embedding` column for Beta2. Note that we here only discuss the *standard* use of Beta models, the discussion on data pre-processing for cross-validation experiments is separate.
 
-#### Generating Beta2 `reduced_embedding` column
+##### Generating Beta2 `reduced_embedding` column
 * Modify the input and output paths in `neasqc_wp61/data/data_processing/generate_pca_test_dataset.py` to your desired input and output paths.
 * Position yourself at the root of the repository.
 * Navigate to the location of the script by using <pre><code>cd neasqc_wp61/data/data_processing/ </pre></code>
 * Run <pre><code>python generate_pca_test_dataset.py </pre></code>
 This will produce a new CSV file with the additional 'reduced_embedding' column. Make sure to do this both for your traing and testing datasets.
 
-#### Generating Beta3 `reduced_embedding` column
+##### Generating Beta3 `reduced_embedding` column
 * Modify the input and output paths in `neasqc_wp61/data/data_processing/generate_fasttext_dataset.py` to your desired input and output paths.
 * Position yourself at the root of the repository.
 * Navigate to the location of the script by using <pre><code>cd neasqc_wp61/data/data_processing/ </pre></code>
