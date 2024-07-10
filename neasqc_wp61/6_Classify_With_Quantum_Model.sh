@@ -17,7 +17,7 @@ do
         p) optimiser=${OPTARG};;
         o) outfile=${OPTARG};;
         a) ansatz=${OPTARG};;
-        q) qn=${OPTARG};;
+        #q) qn=${OPTARG};;
         n) nl=${OPTARG};;
         x) np=${OPTARG};;
 
@@ -31,36 +31,28 @@ do
 
         y) version=${OPTARG};;
         c) pca=${OPTARG};;
-        e) qs=${OPTARG};;
+        #e) qs=${OPTARG};;
     esac
 done
 
-echo "train: $train";
-echo "test: $test";
-echo "validation: $validation";
-echo "seed: $seed";
-echo "model: $model";
-echo "epochs: $epochs";
-echo "runs: $runs";
-echo "optimiser: $optimiser";
-echo "iterations: $iterations";
-echo "outfile: $outfile";
-echo "ansatz: $ansatz";
-echo "number of qubits per noun: $qn";
-echo "number of circuit layers: $nl";
-echo "number of single qubit parameters $np";
+echo "Model name: $model";
+echo "Optimiser: $optimiser";
 
-echo "number of qubits in our circuit: $nq";
-echo "initial spread of the parameters: $qd";
-echo "batch size: $b";
-echo "learning rate: $lr";
-echo "weight decay: $wd";
-echo "step size for the learning rate scheduler: $slr";
-echo "gamma for learning rate scheduler: $g";
 
-echo "version between alpha_1 and alpha_2: $version";
-echo "reduced dimension for the word embeddings: $pca";
-echo "number of qubits per SENTENCE type: $qs";
+echo "Ansatz: $ansatz";
+echo "Number of qubits: $nq";
+echo "Number of layers: $nl";
+echo "Number of parameters per qubit $np";
+
+echo "Training dataset: $train";
+echo "Test dataset: $test";
+echo "Validation dataset: $validation";
+echo "Output file path: $outfile";
+
+echo "Number of epochs: $epochs";
+echo "Number of runs: $runs";
+echo "Number of iterations: $iterations";
+echo "Batch size: $b";
 
 
 
