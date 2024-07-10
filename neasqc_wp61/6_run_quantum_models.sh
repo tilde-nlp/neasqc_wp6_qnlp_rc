@@ -9,7 +9,7 @@ do
 
         m) model=${OPTARG};;        #ok
 
-        f) dataset=${OPTARG};;      # change to ==> d
+        d) dataset=${OPTARG};;      # change to ==> d
         t) train=${OPTARG};;
         v) test=${OPTARG};;
         o) outfile=${OPTARG};;      #ok
@@ -17,7 +17,7 @@ do
 
 
         u) nq=${OPTARG};;
-        s) qd=${OPTARG};;           # change to ==> s
+        s) qd=${OPTARG};;           #ok
         i) iterations=${OPTARG};;   #ok
         b) b=${OPTARG};;            #ok
         w) wd=${OPTARG};;
