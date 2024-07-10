@@ -204,9 +204,6 @@ class Alpha_3_multiclass_trainer:
                 loss = self.criterion(outputs, labels)
                 loss.backward()
 
-                # print('preds: ', preds)
-                # print('labels: ', torch.max(labels, 1)[1])
-
                 self.opt.step()
 
                 # Print iteration results

@@ -69,12 +69,7 @@ class Alpha_3_multiclass_trainer_tests:
         self.test_dataloader = DataLoader(
             self.test_dataset, batch_size=self.batch_size, shuffle=False
         )
-        """
-        self.dummy_dataset = BertEmbeddingDataset(self.X_dummy, self.Y_dummy)
-        self.dummy_dataloader = DataLoader(
-            self.dummy_dataset, batch_size=self.batch_size, shuffle=False
-        )
-        """
+
         # initialise the device
         self.device = torch.device(
             "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -126,9 +121,6 @@ class Alpha_3_multiclass_trainer_tests:
                 _, preds = torch.max(outputs, 1)
                 loss = self.criterion(outputs, labels)
                 loss.backward()
-
-                # print('preds: ', preds)
-                # print('labels: ', torch.max(labels, 1)[1])
 
                 self.optimizer.step()
 
@@ -219,39 +211,3 @@ class Alpha_3_multiclass_trainer_tests:
                 )
 
         return prediction_list.detach().cpu().numpy()
-
-    def compute_dummy_logs(self, best_model):
-        running_loss = 0.0
-        running_corrects = 0
-
-        # Load the best model found during training
-        self.model.load_state_dict(best_model)
-        self.model.etest()
-
-        with torch.no_grad():
-            for inputs, labels in self.dummy_dataloader:
-                batch_size_ = len(inputs)
-                inputs = inputs.to(self.device)
-                labels = labels.to(self.device)
-
-                self.optimizer.zero_grad()
-
-                outputs = self.model(inputs)
-                _, preds = torch.max(outputs, 1)
-                loss = self.criterion(outputs, labels)
-
-                # Print iteration results
-                running_loss += loss.item() * batch_size_
-                batch_corrects = torch.sum(
-                    preds == torch.max(labels, 1)[1]
-                ).item()
-                running_corrects += batch_corrects
-
-        dummy_loss = running_loss / len(self.dummy_dataloader.dataset)
-        dummy_acc = running_corrects / len(self.dummy_dataloader.dataset)
-
-        print("Run dummy results:")
-        print("dummy loss: {}".format(dummy_loss))
-        print("dummy acc: {}".format(dummy_acc))
-
-        return dummy_loss, dummy_acc
