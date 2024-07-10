@@ -3,30 +3,29 @@
 echo 'This script classifies examples using quantum classifier model.'
 
 
-while getopts x:t:v:j:f:s:m:r:i:p:o:a:q:n:x:u:d:b:l:w:z:g:y:c:e: flag
+while getopts N:x:t:v:j:f:s:m:r:i:p:o:a:q:n:x:u:d:b:l:w:z:g:y:c:e: flag
 do
     case "${flag}" in
 
-        m) model=${OPTARG};;        #ok
+        m) model=${OPTARG};;
 
-        d) dataset=${OPTARG};;      # change to ==> d
+        d) dataset=${OPTARG};;
         t) train=${OPTARG};;
         v) test=${OPTARG};;
-        o) outfile=${OPTARG};;      #ok
-        j) validation=${OPTARG};;
+        j) validation=${OPTARG};;   #wtf
+        o) outfile=${OPTARG};;   
 
-
-        u) nq=${OPTARG};;
-        s) qd=${OPTARG};;           #ok
-        i) iterations=${OPTARG};;   #ok
-        b) b=${OPTARG};;            #ok
-        w) wd=${OPTARG};;
-        x) seed=${OPTARG};;         #ok
-        p) optimiser=${OPTARG};;
-        l) lr=${OPTARG};;           #ok
+        N) nq=${OPTARG};;        
+        s) qd=${OPTARG};;        
+        i) iterations=${OPTARG};;
+        b) b=${OPTARG};;         
+        w) wd=${OPTARG};;        
+        x) seed=${OPTARG};;      
+        p) optimiser=${OPTARG};; 
+        l) lr=${OPTARG};;        
         z) slr=${OPTARG};;
-        g) g=${OPTARG};;            #ok
-        r) runs=${OPTARG};;         #ok
+        g) g=${OPTARG};;         
+        r) runs=${OPTARG};;      
 
     esac
 done
