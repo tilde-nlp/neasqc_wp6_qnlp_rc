@@ -17,11 +17,11 @@ do
 
 
         u) nq=${OPTARG};;
-        d) qd=${OPTARG};;           # change to ==> s
+        s) qd=${OPTARG};;           # change to ==> s
         i) iterations=${OPTARG};;   #ok
         b) b=${OPTARG};;            #ok
         w) wd=${OPTARG};;
-        x) seed=${OPTARG};;         # change to x
+        x) seed=${OPTARG};;         #ok
         p) optimiser=${OPTARG};;
         l) lr=${OPTARG};;           #ok
         z) slr=${OPTARG};;

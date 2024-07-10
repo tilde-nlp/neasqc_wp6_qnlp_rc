@@ -38,7 +38,7 @@ When launching the training of a model with `6_run_quantum_models.sh`, the follo
 * `-v` : the path to the test (or validation) dataset.
 * `-o` : path for the output file.
 * `-u` : the number of qubits of the fully-connected quantum circuit.
-* `-d` : the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
+* `-s` : the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
 * `-i` : the number of iterations (epochs) for the training of the model.
 * `-b` : the batch size.
 * `-w` : the weight decay (this can be set to 0).
@@ -99,10 +99,10 @@ The core of the model is defined in `alpha_3_multiclass_model.py`. There are two
 ### Standard example usage
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
-* Run <pre><code> bash 6_run_quantum_models.sh -m alpha_3_multiclass_tests -t PATH_TO_TRAIN  -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
+* Run <pre><code> bash 6_run_quantum_models.sh -m alpha_3_multiclass_tests -t PATH_TO_TRAIN  -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 4 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
 Note that the trainer file is `neasqc_wp61/models/quantum/alpha/module/alpha_3_multiclass_trainer_tests.py` and the pipeline is `neasqc_wp61/data/data_processing/use_alpha_3_multiclass_tests.py`.
 <!--- Runs... but are they the right files?
-bash 6_run_quantum_models.sh -m alpha_3_multiclass_tests -t data/datasets/agnews_balanced_test_bert_pca.csv  -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -x 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/
+bash 6_run_quantum_models.sh -m alpha_3_multiclass_tests -t data/datasets/agnews_balanced_test_bert_pca.csv  -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -x 42 -r 1 -i 10 -u 4 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/
 --->
 
 
@@ -115,7 +115,7 @@ This assumes the dataset is formatted as per standard Alpha3 format and with one
 
 #### Cross-validation example
 * From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
-* Run <pre><code> bash 6_run_quantum_models.sh -m alpha_3_multiclass -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 4 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
+* Run <pre><code> bash 6_run_quantum_models.sh -m alpha_3_multiclass -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 4 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw/  </pre></code>
 
 
 
@@ -130,10 +130,10 @@ The Beta 2 model architecture is defined in `neasqc_wp61/models/quantum/beta_2_3
 ### Standard example usage
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
-* Run <pre><code> bash 6_run_quantum_models.sh -m beta_2_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
+* Run <pre><code> bash 6_run_quantum_models.sh -m beta_2_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 8 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 Note that the trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py` and the pipeline `neasqc_wp61/data/data_processing/use_beta_2_3_tests.py`.
 <!--- Runs... but are they the right files?
-bash 6_run_quantum_models.sh -m beta_2_tests -f data/datasets/agnews_balanced_test_bert_pca.csv -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -x 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+bash 6_run_quantum_models.sh -m beta_2_tests -f data/datasets/agnews_balanced_test_bert_pca.csv -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -x 42 -r 1 -i 10 -u 8 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 --->
 
 
@@ -156,7 +156,7 @@ For the test dataset, you do not need the `split` columns, and you can use the `
 
 #### Cross-validation example
 * From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
-* Run <pre><code> bash 6_run_quantum_models.sh -m beta_2 -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
+* Run <pre><code> bash 6_run_quantum_models.sh -m beta_2 -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 8 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 
 
 
@@ -169,10 +169,10 @@ Beta3 is simply a different flavour of Beta2. Here, the vector used as input to 
 The trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py` and pipeline `neasqc_wp61/data/data_processing/use_beta_2_3_tests.py`.
 * Position yourself at the root of the directory.
 * Navigate to `neasqc_wp61` by using <pre><code> cd neasqc_wp61 </code></pre>
-* Run <pre><code> bash 6_run_quantum_models.sh -m beta_3_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
+* Run <pre><code> bash 6_run_quantum_models.sh -m beta_3_tests -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 8 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw  </pre></code>
 Trainer and pipeline are the same as for Beta2.
 <!--- Runs... but are they the right files?
-bash 6_run_quantum_models.sh -m beta_2_tests -f data/datasets/agnews_balanced_test_bert_pca.csv -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -x 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+bash 6_run_quantum_models.sh -m beta_2_tests -f data/datasets/agnews_balanced_test_bert_pca.csv -v data/datasets/agnews_balanced_test_bert_pca.csv -p Adam -x 42 -r 1 -i 10 -u 8 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 --->
 
 
@@ -189,5 +189,5 @@ If you have a dataset with the `class`, `split` and `sentence` column, and want 
 1. From the root of the directory, navigate to `neasqc_wp61` by using: <pre><code>cd neasqc_wp61</code></pre>
 2. Use the following command:
 ```
-bash 6_run_quantum_models.sh -m beta_3 -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 8 -d 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
+bash 6_run_quantum_models.sh -m beta_3 -f PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -u 8 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 ```
