@@ -30,21 +30,24 @@ Every model produces the same output:
 * A `.pt` file for each run with the final weights of the model at the end of the run.
 
 #### Models arguments
-When launching the training of a model, the following parameters must be specified as command line arguments.
-* `-s` : an integer seed for result replication.
+When launching the training of a model with `6_Classify_With_Quantum_Model.sh`, the following parameters must be specified as command line arguments.
+
+* `-m` : the name of the model
+* `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
+* `-t` : alternatively to `-f` some models use a path to the training file with this flag.
+* `-v` : the path to the test (or validation) dataset.
+* `-o` : path for the output file.
+* `-u` : the number of qubits of the fully-connected quantum circuit.
+* `-d` : `q_delta`, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
 * `-i` : the number of iterations (epochs) for the training of the model.
-* `-r` : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
-* `-u` : the number of qubits of the fully-connected quantum circuit
-* `-d` : q_delta, i.e. the initial spread of the quantum parameters (we recommend setting this to 0.01 initially).
-* `-p` : the <code>PyTorch</code> optimiser of choice.
 * `-b` : the batch size.
-* `-l` : the learning rate for the optimiser.
 * `-w` : the weight decay (this can be set to 0).
+* `-s` : an integer seed for result replication.
+* `-p` : the <code>PyTorch</code> optimiser of choice.
+* `-l` : the learning rate for the optimiser.
 * `-z` : the step size for the learning rate scheduler.
 * `-g` : the gamma for the learning rate scheduler.
-* `-o` : path for the output file.
-* `-v` : the path to the test dataset.
-* `-f` : the path to the training dataset (in the case of the **standard version**) or to the dataset containing the training and validation data (in the case of the **cross-validation version**).
+* `-r` : the number of runs of the model (each run will be initialised with a different seed determined by the -s parameter).
 
 
 ### Datasets

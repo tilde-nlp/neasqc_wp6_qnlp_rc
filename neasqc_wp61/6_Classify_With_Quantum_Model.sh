@@ -6,43 +6,32 @@ echo 'This script classifies examples using quantum classifier model.'
 while getopts t:v:j:f:s:m:r:i:p:o:a:q:n:x:u:d:b:l:w:z:g:y:c:e: flag
 do
     case "${flag}" in
+
+        m) model=${OPTARG};;
+        f) dataset=${OPTARG};;
         t) train=${OPTARG};;
         v) test=${OPTARG};;
-        j) validation=${OPTARG};;
-        f) dataset=${OPTARG};;
-        s) seed=${OPTARG};;
-        m) model=${OPTARG};;
-        r) runs=${OPTARG};;
-        i) iterations=${OPTARG};;
-        p) optimiser=${OPTARG};;
         o) outfile=${OPTARG};;
-        a) ansatz=${OPTARG};;
-        #q) qn=${OPTARG};;
-        n) nl=${OPTARG};;
-        x) np=${OPTARG};;
-
         u) nq=${OPTARG};;
         d) qd=${OPTARG};;
+        i) iterations=${OPTARG};;
         b) b=${OPTARG};;
-        l) lr=${OPTARG};;
         w) wd=${OPTARG};;
+        s) seed=${OPTARG};;
+        p) optimiser=${OPTARG};;
+        l) lr=${OPTARG};;
         z) slr=${OPTARG};;
         g) g=${OPTARG};;
+        r) runs=${OPTARG};;
 
-        y) version=${OPTARG};;
-        c) pca=${OPTARG};;
-        #e) qs=${OPTARG};;
+        j) validation=${OPTARG};;
     esac
 done
 
 echo "Model name: $model";
 echo "Optimiser: $optimiser";
 
-
-echo "Ansatz: $ansatz";
 echo "Number of qubits: $nq";
-echo "Number of layers: $nl";
-echo "Number of parameters per qubit $np";
 
 echo "Training dataset: $train";
 echo "Test dataset: $test";
@@ -56,46 +45,36 @@ echo "Batch size: $b";
 
 
 
-if [[ "${model}" == "pre_alpha_1" ]]
+if [[ "${model}" == "alpha_3_multiclass" ]]
 then
-echo "running pre_alpha"
-python3.10 ./data/data_processing/use_pre_alpha_1.py -s ${seed} -op ${optimiser} -i ${iterations} -r ${runs} -tr ${train} -te ${test} -val ${validation} -o ${outfile}
-elif [[ "${model}" == "pre_alpha_2" ]]
-then
-echo "running pre_alpha_2"
-python3.10 ./data/data_processing/use_pre_alpha_2.py -s ${seed} -op ${optimiser} -i ${iterations} -r ${runs} -tr ${train} -te ${test} -val ${validation} -o ${outfile} -an ${ansatz} -qn ${qn} -nl ${nl} -np ${np} -b ${b}
-elif [[ "${model}" == "alpha_3" ]]
-then
-echo "running alpha_3"
-python3.10 ./data/data_processing/use_alpha_3.py -s ${seed} -i ${iterations} -r ${runs} -tr ${train} -te ${test} -val ${validation} -o ${outfile} -nq ${nq} -qd ${qd} -b ${b} -lr ${lr} -wd ${wd} -slr ${slr} -g ${g}
-elif [[ "${model}" == "alpha_1_2" ]]
-then
-echo "running alpha_1_2"
-python3.10 ./data/data_processing/use_alpha_1_2.py -s ${seed} -i ${iterations} -r ${runs} -v ${version} -pca ${pca} -tr ${train} -te ${test} -val ${validation} -o ${outfile} -an ${ansatz} -qn ${qn} -qs ${qs} -nl ${nl} -np ${np} -b ${b} -lr ${lr} -wd ${wd} -slr ${slr} -g ${g}
-elif [[ "${model}" == "alpha_3_multiclass" ]]
-then
-echo "running alpha_3_multiclass"
+echo "Running ALPHA3-multiclass"
 python3.10 ./data/data_processing/use_alpha_3_multiclass.py -op ${optimiser} -s ${seed} -i ${iterations} -r ${runs} -dat ${dataset} -te ${test} -o ${outfile} -nq ${nq} -qd ${qd} -b ${b} -lr ${lr} -wd ${wd} -slr ${slr} -g ${g}
+
 elif [[ "${model}" == "alpha_3_multiclass_tests" ]]
 then
-echo "running alpha_3_multiclass_tests"
+echo "Running ALPHA3-multiclass-tests"
 python3.10 ./data/data_processing/use_alpha_3_multiclass_tests.py -s ${seed} -i ${iterations} -r ${runs} -tr ${train} -te ${test} -o ${outfile} -nq ${nq} -qd ${qd} -b ${b} -lr ${lr} -wd ${wd} -slr ${slr} -g ${g}
+
 elif [[ "${model}" == "beta_2" ]]
 then
-echo "running beta_2"
+echo "Running BETA2"
 python3.10 ./data/data_processing/use_beta_2_3.py -m beta_2 -op ${optimiser} -s ${seed} -i ${iterations} -r ${runs} -dat ${dataset} -te ${test} -o ${outfile} -nq ${nq} -qd ${qd} -b ${b} -lr ${lr} -wd ${wd} -slr ${slr} -g ${g}
+
 elif [[ "${model}" == "beta_2_tests" ]]
 then
-echo "running beta_2_tests"
+echo "Running BETA2-tests"
 python3.10 ./data/data_processing/use_beta_2_3_tests.py -m beta_2_tests -op ${optimiser} -s ${seed} -i ${iterations} -r ${runs} -dat ${dataset} -te ${test} -o ${outfile} -nq ${nq} -qd ${qd} -b ${b} -lr ${lr} -wd ${wd} -slr ${slr} -g ${g}
+
 elif [[ "${model}" == "beta_3" ]]
 then
-echo "running beta_3"
+echo "Running BETA3"
 python3.10 ./data/data_processing/use_beta_2_3.py -m beta_3 -op ${optimiser} -s ${seed} -i ${iterations} -r ${runs} -dat ${dataset} -te ${test} -o ${outfile} -nq ${nq} -qd ${qd} -b ${b} -lr ${lr} -wd ${wd} -slr ${slr} -g ${g}
+
 elif [[ "${model}" == "beta_3_tests" ]]
 then
-echo "running beta_3_tests"
+echo "Running BETA3-tests"
 python3.10 ./data/data_processing/use_beta_2_3_tests.py -m beta_3_tests -op ${optimiser} -s ${seed} -i ${iterations} -r ${runs} -dat ${dataset} -te ${test} -o ${outfile} -nq ${nq} -qd ${qd} -b ${b} -lr ${lr} -wd ${wd} -slr ${slr} -g ${g}
+
 else
-echo "no model ran";
+echo "Invalid model choice, try again!";
 fi
