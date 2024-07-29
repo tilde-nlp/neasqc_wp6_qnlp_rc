@@ -191,3 +191,10 @@ If you have a dataset with the `class`, `split` and `sentence` column, and want 
 ```
 bash 6_run_quantum_models.sh -m beta_3 -d PATH_TO_TRAIN -v PATH_TO_TEST -p Adam -x 42 -r 1 -i 10 -N 8 -s 0.01 -b 2048 -l 0.002 -w 0 -z 150 -g 1 -o ./benchmarking/results/raw
 ```
+
+
+
+
+*This project has received funding from the European Union’s Horizon
+2020 research and innovation programme under grant agreement No 951821.*
+
