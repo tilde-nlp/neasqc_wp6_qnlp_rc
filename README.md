@@ -1,5 +1,5 @@
 # Quantum Natural Language Processing : NEASQC WP 6.1
-This readme gives a brief introduction to the models presented in the NEASQC work-package 6.1 on quantum natural language processing and provides guidance on how to run each model. We give a brief overview of each of the three models here: Alpha3, Beta2 and Beta3, but encourage users to refer to the corresponding report containing an extended abstract presenting the models more in depth.
+This readme gives a brief introduction to the models presented in the [NEASQC](https://www.neasqc.eu/) work-package 6.1 on quantum natural language processing and provides guidance on how to run each model. We give a brief overview of each of the three models here: Alpha3, Beta2 and Beta3, but encourage users to refer to the corresponding report containing an extended abstract presenting the models more in depth.
 
 
 
