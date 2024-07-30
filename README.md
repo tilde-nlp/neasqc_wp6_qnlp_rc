@@ -53,6 +53,8 @@ When launching the training of a model with `6_run_quantum_models.sh`, the follo
 ### Datasets
 For simplicity we assume datasets are placed in `neasqc_wp61/data/datasets`. The datasets we used can be found [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/v2-classical-nlp-models/neasqc_wp61/data/datasets). Please note that to use these yourself you will need to add the `class` and `sentence` column headers and convert the format to `.csv`.
 
+Note that in some cases and depending on the datasets you wish to use and their naming conventions, parts of the path to the dataset might have to be adjusted in the source code.
+
 #### Dataset formatting
 In order to be compatible with our models, please ensure your dataset:
 - Is in `CSV` format.
