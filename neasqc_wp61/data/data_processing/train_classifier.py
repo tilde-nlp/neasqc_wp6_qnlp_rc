@@ -107,11 +107,11 @@ def main():
         if len(history.history["val_accuracy"]) < ds["input_args"]["iterations"]:
             ds["input_args"]["iterations"] = len(history.history["val_accuracy"])
 
-    if not os.path.exists(args.modeldir):
-        os.makedirs(args.modeldir)
+        if not os.path.exists(args.modeldir):
+            os.makedirs(args.modeldir)
         
-    with open(f"{args.modeldir}/results.json", "w", encoding="utf-8") as f:
-        json.dump(ds, f, ensure_ascii=False, indent=2)
+        with open(f"{args.modeldir}/results.json", "w", encoding="utf-8") as f:
+            json.dump(ds, f, ensure_ascii=False, indent=2)
     
 if __name__ == "__main__":
     sys.exit(int(main() or 0))

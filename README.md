@@ -284,7 +284,7 @@ Example:
   ```
 Note that the trainer file is `neasqc_wp61/models/quantum/beta_2_3/beta_2_3_trainer_tests.py` and the pipeline file is `neasqc_wp61/data/data_processing/use_beta_2_3_tests.py`.
 
-The script `6_2_TrainQuantumModelsForAllDatasets.sh` can be used to train and evaluate QNLP models for all pre-processed datasets. Note that this may require ~5-10 hours per dataset.
+The script `6_2_TrainQuantumModelsForAllDatasets.sh` can be used to train and evaluate QNLP models for all pre-processed datasets. Note that this may require ~5-48 hours per dataset.
 
 ### Step 7 - Combining results
 Results from individual `results.json` files can be combined using the `combine-results.py` script using the following parameters:
@@ -312,58 +312,176 @@ Each TSV file consists of 5 columns:
 * Upper bound (mean + 95% confidence interval)
 * Confidence interval
 
+
 ## Results
+
 ### labelled_newscatcher_dataset
-| Model          | Embedding model   | Dimensionality | Test mean ± CI | Dev mean ± CI | Train mean ± CI |
-| -------------- | ----------------- | -------------- | -------------- | ------------- | --------------- |
-| Classical FFNN | bert-base-uncased | full           | 75.49±0.05     | 75.44±0.18    | 76.41±0.43      |
-| Classical FFNN | ember-v1          | full           | **80.89±0.06** | 80.13±0.38    | 81.16±1.69      |
-| Classical FFNN | fasttext          | full           | 76.26±0.07     | 74.43±0.68    | 74.64±0.98      |
-| Classical FFNN | bert-base-uncased | 8              | 56.47±0.08     | 55.84±0.69    | 55.25±0.9       |
-| QNLP Beta 2/3  | bert-base-uncased | 8              | 52.41±0.04     | 50.3±1.97     | 48.04±4.02      |
-| Classical FFNN | ember-v1          | 8              | 69.14±0.09     | 69.05±0.63    | 68.73±0.89      |
-| QNLP Beta 2/3  | ember-v1          | 8              | 65.38±0.03     | 64.32±1.59    | 62.42±5.26      |
-| Classical FFNN | fasttext          | 8              | 55.27±0.16     | 54.21±0.93    | 54.53±1.05      |
-| QNLP Beta 2/3  | fasttext          | 8              | 46.05±0.27     | 41.85±3.22    | 40.8±5.15       |
-| Classical FFNN | bert-base-uncased | 5              | 44.75±0.06     | 44.2±0.5      | 44.01±0.65      |
-| QNLP Beta 2/3  | bert-base-uncased | 5              | 41.3±0.06      | 39.5±1.35     | 38.75±2.73      |
-| Classical FFNN | ember-v1          | 5              | 66.03±0.08     | 65.24±0.97    | 65±1.22         |
-| QNLP Beta 2/3  | ember-v1          | 5              | 63.63±0.03     | 61.63±1.74    | 59.84±5.03      |
-| Classical FFNN | fasttext          | 5              | 38.34±0.09     | 37.36±0.43    | 38.43±0.49      |
-| QNLP Beta 2/3  | fasttext          | 5              | 33.86±0.24     | 29.65±1.35    | 29.19±3.07      |
-| Classical FFNN | bert-base-uncased | 3              | 32.23±0.1      | 31.99±0.2     | 32.28±0.29      |
-| QNLP Beta 2/3  | bert-base-uncased | 3              | 31.21±0.08     | 29.74±0.54    | 29.59±1.73      |
-| Classical FFNN | ember-v1          | 3              | 55.2±0.08      | 55.03±0.58    | 54.7±0.85       |
-| QNLP Beta 2/3  | ember-v1          | 3              | 51.98±0.13     | 50.09±1.4     | 48.92±2.9       |
-| Classical FFNN | fasttext          | 3              | 36.57±0.05     | 35.46±0.26    | 36.02±0.35      |
-| QNLP Beta 2/3  | fasttext          | 3              | 32.27±0.36     | 28.24±0.99    | 27.99±2.58      |
+
+The test set consisted of 8736 examples featuring 7 classes.
+
+| Model          | Embedding model   | Dimensionality | Test mean ± CI | Dev mean ± CI | Train mean ± CI | Seconds per model ± CI |
+| -------------- | ----------------- | -------------- | -------------- | ------------- | --------------- | ---------------------- |
+| Classical FFNN | ember-v1          | full           | **80.89±0.06** | 80.13±0.38    | 81.16±1.69      | 13.22±1.52             |
+| Classical FFNN | fasttext          | full           | 76.26±0.07     | 74.43±0.68    | 74.64±0.98      | 25.27±0.34             |
+| Classical FFNN | bert-base-uncased | full           | 75.49±0.05     | 75.44±0.18    | 76.41±0.43      | 28.88±1.23             |
+| Classical FFNN | ember-v1          | 8              | 69.14±0.09     | 69.05±0.63    | 68.73±0.89      | 21.75±0.19             |
+| QNLP Beta 2/3  | ember-v1          | 8              | 65.38±0.03     | 64.32±1.59    | 62.42±5.26      | 923.14±12.73           |
+| Classical FFNN | bert-base-uncased | 8              | 56.47±0.08     | 55.84±0.69    | 55.25±0.9       | 21.55±0.2              |
+| Classical FFNN | fasttext          | 8              | 55.27±0.16     | 54.21±0.93    | 54.53±1.05      | 21.87±0.21             |
+| QNLP Beta 2/3  | bert-base-uncased | 8              | 52.41±0.04     | 50.3±1.97     | 48.04±4.02      | 899.48±1.45            |
+| QNLP Beta 2/3  | fasttext          | 8              | 46.05±0.27     | 41.85±3.22    | 40.8±5.15       | 894.89±1               |
+| Classical FFNN | ember-v1          | 5              | 66.03±0.08     | 65.24±0.97    | 65±1.22         | 21.62±0.25             |
+| QNLP Beta 2/3  | ember-v1          | 5              | 63.63±0.03     | 61.63±1.74    | 59.84±5.03      | 910.57±11.6            |
+| Classical FFNN | bert-base-uncased | 5              | 44.75±0.06     | 44.2±0.5      | 44.01±0.65      | 20.93±0.21             |
+| QNLP Beta 2/3  | bert-base-uncased | 5              | 41.31±0.05     | 39.5±1.35     | 38.75±2.73      | 891.34±1.42            |
+| Classical FFNN | fasttext          | 5              | 38.34±0.09     | 37.36±0.43    | 38.43±0.49      | 21.45±0.19             |
+| QNLP Beta 2/3  | fasttext          | 5              | 33.86±0.24     | 29.65±1.35    | 29.19±3.07      | 890.01±1.04            |
+| Classical FFNN | ember-v1          | 3              | 55.2±0.08      | 55.03±0.58    | 54.7±0.85       | 21.58±0.19             |
+| QNLP Beta 2/3  | ember-v1          | 3              | 51.98±0.13     | 50.09±1.4     | 48.92±2.9       | 982.85±15.14           |
+| Classical FFNN | fasttext          | 3              | 36.57±0.05     | 35.46±0.26    | 36.02±0.35      | 21.61±0.19             |
+| QNLP Beta 2/3  | fasttext          | 3              | 32.27±0.36     | 28.24±0.99    | 27.99±2.58      | 960.96±0.78            |
+| Classical FFNN | bert-base-uncased | 3              | 32.23±0.1      | 31.99±0.2     | 32.28±0.29      | 21.53±0.2              |
+| QNLP Beta 2/3  | bert-base-uncased | 3              | 31.17±0.08     | 29.74±0.54    | 29.59±1.73      | 963.02±2.09            |
 
 ### food-com-recipes-user-interactions
-| Model          | Embedding model   | Dimensionality | Test mean ± CI | Dev mean ± CI | Train mean ± CI |
-| -------------- | ----------------- | ---- | ---------- | ---------- | ---------- |
-| Classical FFNN | bert-base-uncased | full | 50.94±0.11 | 49.74±0.27 | 51.63±0.58 |
-| Classical FFNN | ember-v1          | full | **63.36±0.08** | 63.15±0.21 | 63.9±0.82  |
-| Classical FFNN | fasttext          | full | 51.57±0.11 | 51.01±0.46 | 50.34±0.56 |
-| Classical FFNN | bert-base-uncased | 8    | 36.05±0.12 | 34.39±0.32 | 35.03±0.38 |
-| QNLP Beta 2/3  | bert-base-uncased | 8    | 35.04±0.06 | 33.09±0.42 | 33.42±1.57 |
-| Classical FFNN | ember-v1          | 8    | 61.53±0.09 | 60.95±0.65 | 59.9±0.75  |
-| QNLP Beta 2/3  | ember-v1          | 8    | 57.36±0.06 | 52.98±1.74 | 51.17±4.24 |
-| Classical FFNN | fasttext          | 8    | 40.81±0.18 | 40.74±0.45 | 39.74±0.49 |
-| QNLP Beta 2/3  | fasttext          | 8    | 33.83±0.31 | 31.48±1.86 | 29.1±2.44  |
-| Classical FFNN | bert-base-uncased | 5    | 32.63±0.1  | 32.35±0.21 | 32.78±0.29 |
-| QNLP Beta 2/3  | bert-base-uncased | 5    | 32.27±0.05 | 31.4±0.21  | 31.63±1.19 |
-| Classical FFNN | ember-v1          | 5    | 61.26±0.09 | 60.66±0.48 | 59.6±0.64  |
-| QNLP Beta 2/3  | ember-v1          | 5    | 57.24±0.07 | 54.22±1.24 | 52.1±3.99  |
-| Classical FFNN | fasttext          | 5    | 35.36±0.12 | 35.03±0.38 | 33.89±0.36 |
-| QNLP Beta 2/3  | fasttext          | 5    | 31.78±0.21 | 30.66±1.24 | 28.7±2.06  |
-| Classical FFNN | bert-base-uncased | 3    | 31.26±0.11 | 31.17±0.25 | 30.64±0.27 |
-| QNLP Beta 2/3  | bert-base-uncased | 3    | 30.69±0.08 | 30.34±0.26 | 30.27±0.86 |
-| Classical FFNN | ember-v1          | 3    | 57.28±0.13 | 56.09±0.55 | 55.05±0.71 |
-| QNLP Beta 2/3  | ember-v1          | 3    | 53.72±0.16 | 50.7±1.19  | 48.99±3.1  |
-| Classical FFNN | fasttext          | 3    | 34.11±0.08 | 33.99±0.15 | 33.02±0.22 |
-| QNLP Beta 2/3  | fasttext          | 3    | 31.15±0.2  | 29.46±1.22 | 27.7±1.78  |
 
+The test set consisted of 6385 examples featuring 5 classes.
 
+| Model          | Embedding model   | Dimensionality | Test mean ± CI | Dev mean ± CI | Train mean ± CI | Seconds per model ± CI |
+| -------------- | ----------------- | -------------- | -------------- | ------------- | --------------- | ---------------------- |
+| Classical FFNN | ember-v1          | full | **63.36±0.08** | 63.15±0.21 | 63.9±0.82  | 8.39±1.21    | 0.633563038 |
+| Classical FFNN | fasttext          | full | 51.57±0.11 | 51.01±0.46 | 50.34±0.56 | 19.68±0.18   | 0.515672141 |
+| Classical FFNN | bert-base-uncased | full | 50.94±0.11 | 49.74±0.27 | 51.63±0.58 | 19.12±1.72   | 0.509449232 |
+| Classical FFNN | ember-v1          | 8    | 61.53±0.09 | 60.95±0.65 | 59.9±0.75  | 16.26±0.17   | 0.615343245 |
+| QNLP Beta 2/3  | ember-v1          | 8    | 57.36±0.06 | 52.98±1.74 | 51.17±4.24 | 684.42±10.05 | 0.573552597 |
+| Classical FFNN | fasttext          | 8    | 40.81±0.18 | 40.74±0.45 | 39.74±0.49 | 16.15±0.17   | 0.408071    |
+| Classical FFNN | bert-base-uncased | 8    | 36.05±0.12 | 34.39±0.32 | 35.03±0.38 | 16.43±0.19   | 0.360480292 |
+| QNLP Beta 2/3  | bert-base-uncased | 8    | 35.04±0.06 | 33.09±0.42 | 33.42±1.57 | 653.77±0.87  | 0.350394153 |
+| QNLP Beta 2/3  | fasttext          | 8    | 33.83±0.31 | 31.48±1.86 | 29.1±2.44  | 653.3±0.98   | 0.338339859 |
+| Classical FFNN | ember-v1          | 5    | 61.26±0.09 | 60.66±0.48 | 59.6±0.64  | 16.13±0.14   | 0.612623332 |
+| QNLP Beta 2/3  | ember-v1          | 5    | 57.24±0.07 | 54.22±1.24 | 52.1±3.99  | 673.69±10.36 | 0.572440616 |
+| Classical FFNN | fasttext          | 5    | 35.36±0.12 | 35.03±0.38 | 33.89±0.36 | 16.11±0.15   | 0.353636128 |
+| Classical FFNN | bert-base-uncased | 5    | 32.63±0.1  | 32.35±0.21 | 32.78±0.29 | 15.98±0.12   | 0.326275122 |
+| QNLP Beta 2/3  | bert-base-uncased | 5    | 32.27±0.05 | 31.4±0.21  | 31.63±1.19 | 645.21±0.76  | 0.322704255 |
+| QNLP Beta 2/3  | fasttext          | 5    | 31.78±0.21 | 30.66±1.24 | 28.7±2.06  | 651.48±1.14  | 0.317781258 |
+| Classical FFNN | ember-v1          | 3    | 57.28±0.13 | 56.09±0.55 | 55.05±0.71 | 16.54±0.15   | 0.572832161 |
+| QNLP Beta 2/3  | ember-v1          | 3    | 53.72±0.16 | 50.7±1.19  | 48.99±3.1  | 729.66±13.7  | 0.53724354  |
+| Classical FFNN | fasttext          | 3    | 34.11±0.08 | 33.99±0.15 | 33.02±0.22 | 16.29±0.11   | 0.341143302 |
+| Classical FFNN | bert-base-uncased | 3    | 31.26±0.11 | 31.17±0.25 | 30.64±0.27 | 16.12±0.18   | 0.312649436 |
+| QNLP Beta 2/3  | fasttext          | 3    | 31.15±0.2  | 29.46±1.22 | 27.7±1.78  | 703.36±1.18  | 0.311537458 |
+| QNLP Beta 2/3  | bert-base-uncased | 3    | 30.69±0.08 | 30.34±0.26 | 30.27±0.86 | 700.55±0.76  | 0.306927695 |
+
+### huffpost-news
+
+The test set consisted of 7238 examples featuring 22 classes.
+
+| Model          | Embedding model   | Dimensionality | Test mean ± CI | Dev mean ± CI | Train mean ± CI | Seconds per model ± CI |
+| -------------- | ----------------- | -------------- | -------------- | ------------- | --------------- | ---------------------- |
+| Classical FFNN | ember-v1          | full | **64.05±0.15** | 64.33±0.6  | 65.72±1.33 | 22.71±1.95  |
+| Classical FFNN | bert-base-uncased | full | 53.6±0.21  | 53.41±0.75 | 54.67±0.99 | 26.27±0.71  |
+| Classical FFNN | fasttext          | full | 46.23±0.37 | 44.89±1.08 | 45.09±1.19 | 21.79±0.26  |
+| Classical FFNN | ember-v1          | 8    | 42.74±0.12 | 42.49±0.86 | 42.5±1.01  | 18.74±0.19  |
+| QNLP Beta 2/3  | ember-v1          | 8    | 35.68±0.08 | 32.66±2.03 | 32.2±4.01  | 745.73±1.43 |
+| Classical FFNN | bert-base-uncased | 8    | 21.45±0.12 | 20.6±0.42  | 21.08±0.5  | 18.37±0.18  |
+| Classical FFNN | fasttext          | 8    | 20.47±0.15 | 19.74±0.52 | 19.47±0.54 | 18.15±0.16  |
+| QNLP Beta 2/3  | bert-base-uncased | 8    | 19.06±0.06 | 16.74±1.19 | 16.84±1.7  | 740.58±0.77 |
+| QNLP Beta 2/3  | fasttext          | 8    | 14.04±0.22 | 10.32±1.59 | 10.01±1.73 | 745.79±1.81 |
+| Classical FFNN | ember-v1          | 5    | 35.2±0.11  | 34.99±0.58 | 35.24±0.69 | 18.07±0.17  |
+| QNLP Beta 2/3  | ember-v1          | 5    | 26.3±0.29  | 24.43±2.19 | 23.48±3    | 743.77±1.27 |
+| Classical FFNN | fasttext          | 5    | 17.57±0.1  | 17.59±0.31 | 17.71±0.35 | 18.26±0.18  |
+| Classical FFNN | bert-base-uncased | 5    | 16.39±0.07 | 16.81±0.24 | 16.52±0.26 | 18.14±0.2   |
+| QNLP Beta 2/3  | bert-base-uncased | 5    | 14.21±0.08 | 13.24±0.69 | 13.31±1.24 | 737.83±0.88 |
+| QNLP Beta 2/3  | fasttext          | 5    | 13.54±0.19 | 10.68±1.2  | 10.3±1.53  | 739.18±1.66 |
+| Classical FFNN | ember-v1          | 3    | 25.81±0.09 | 25.99±0.43 | 25.52±0.5  | 18.21±0.19  |
+| QNLP Beta 2/3  | ember-v1          | 3    | 19.43±0.26 | 16.93±1.15 | 16.65±1.25 | 801.47±1.61 |
+| Classical FFNN | fasttext          | 3    | 13.91±0.05 | 13.51±0.2  | 13.52±0.23 | 18.37±0.18  |
+| Classical FFNN | bert-base-uncased | 3    | 12.8±0.07  | 13.38±0.2  | 13.4±0.23  | 18.52±0.19  |
+| QNLP Beta 2/3  | bert-base-uncased | 3    | 11.7±0.08  | 10.6±0.82  | 10.96±1.06 | 797.71±0.73 |
+| QNLP Beta 2/3  | fasttext          | 3    | 10.31±0.1  | 8.96±0.71  | 8.99±0.97  | 795.31±1.67 |
+
+### amazon-fine-food-reviews
+
+The test set consisted of 8415 examples featuring 5 classes.
+
+| Model          | Embedding model   | Dimensionality | Test mean ± CI | Dev mean ± CI | Train mean ± CI | Seconds per model ± CI |
+| -------------- | ----------------- | -------------- | -------------- | ------------- | --------------- | ---------------------- |
+| Classical FFNN | ember-v1          | full | **52.31±0.1**  | 52.25±0.24 | 52.92±0.92 | 6.45±0.35   |
+| Classical FFNN | bert-base-uncased | full | 45.88±0.08 | 45.84±0.17 | 47.46±0.39 | 17.84±1.81  |
+| Classical FFNN | fasttext          | full | 45.26±0.07 | 45.06±0.25 | 44.82±0.33 | 24.27±0.41  |
+| Classical FFNN | ember-v1          | 8    | 51.1±0.06  | 50.81±0.33 | 50.15±0.38 | 20.96±0.15  |
+| QNLP Beta 2/3  | ember-v1          | 8    | 48.04±0.02 | 46.69±0.74 | 45.84±2.74 | 868.87±1.91 |
+| Classical FFNN | fasttext          | 8    | 36.83±0.09 | 37.32±0.29 | 36.59±0.32 | 20.87±0.24  |
+| QNLP Beta 2/3  | fasttext          | 8    | 36.14±0.08 | 34.22±1.3  | 33.14±2    | 868.59±1.09 |
+| Classical FFNN | bert-base-uncased | 8    | 34.39±0.09 | 34.61±0.29 | 34.39±0.33 | 21±0.19     |
+| QNLP Beta 2/3  | bert-base-uncased | 8    | 33±0.05    | 32.65±0.26 | 32.59±0.84 | 860.32±1.18 |
+| Classical FFNN | ember-v1          | 5    | 50.91±0.07 | 50.87±0.17 | 50.24±0.23 | 20.45±0.18  |
+| QNLP Beta 2/3  | ember-v1          | 5    | 48.15±0.08 | 46.95±0.33 | 46.35±2.14 | 859.43±1.47 |
+| Classical FFNN | fasttext          | 5    | 32.75±0.08 | 32.66±0.14 | 32.41±0.19 | 20.94±0.23  |
+| QNLP Beta 2/3  | fasttext          | 5    | 32.2±0.09  | 29.94±0.95 | 29.78±1.44 | 860.69±0.83 |
+| Classical FFNN | bert-base-uncased | 5    | 31.4±0.14  | 31.62±0.2  | 31.76±0.27 | 20.42±0.16  |
+| QNLP Beta 2/3  | bert-base-uncased | 5    | 30.14±0.06 | 30.41±0.48 | 29.58±0.89 | 857.57±1.43 |
+| Classical FFNN | ember-v1          | 3    | 50.69±0.07 | 50.66±0.15 | 49.74±0.3  | 20.65±0.45  |
+| QNLP Beta 2/3  | ember-v1          | 3    | 48.46±0.06 | 47.24±0.44 | 46.17±2.16 | 929.39±2.06 |
+| Classical FFNN | fasttext          | 3    | 29.51±0.05 | 28.12±0.1  | 28.27±0.1  | 20.9±0.16   |
+| QNLP Beta 2/3  | fasttext          | 3    | 29.01±0.11 | 26.54±0.6  | 26.88±0.88 | 931.62±0.83 |
+| Classical FFNN | bert-base-uncased | 3    | 28.43±0.11 | 28.72±0.19 | 28.9±0.24  | 19.66±0.93  |
+| QNLP Beta 2/3  | bert-base-uncased | 3    | 28.05±0.08 | 27.64±0.27 | 27.73±0.68 | 933.43±2.57 |
+
+### ag-news
+
+The test set consisted of 10692 examples featuring 4 classes.
+
+| Model          | Embedding model   | Dimensionality | Test mean ± CI | Dev mean ± CI | Train mean ± CI | Seconds per model ± CI |
+| -------------- | ----------------- | -------------- | -------------- | ------------- | --------------- | ---------------------- |
+| Classical FFNN | ember-v1          | full | 88.53±0.04 | 88.1±0.17  | 88.56±0.57 | 13.62±0.97   | 0.885253773 |
+| Classical FFNN | fasttext          | full | 84.5±0.02  | 83.75±0.34 | 83.66±0.7  | 29.85±0.48   | 0.845021204 |
+| Classical FFNN | bert-base-uncased | full | 81.97±0.04 | 81.58±0.14 | 82.1±0.39  | 28.84±2.38   | 0.819672028 |
+| Classical FFNN | ember-v1          | 8    | 84.12±0.05 | 83.39±0.83 | 83.12±1.24 | 25.75±0.21   | 0.841177199 |
+| QNLP Beta 2/3   | ember-v1          | 8    | 80.41±0.03 | 79.28±1.52 | 78.02±3.61 | 1122.52±8.26 | 0.804133932 |
+| Classical FFNN | fasttext          | 8    | 75.02±0.02 | 73.55±0.71 | 73.58±0.99 | 25.85±0.24   | 0.750193284 |
+| QNLP Beta 2/3   | fasttext          | 8    | 72.7±0.09  | 68.08±3.45 | 66.78±4.89 | 1101.27±5.77 | 0.727010849 |
+| Classical FFNN | bert-base-uncased | 8    | 72.23±0.05 | 71.3±0.41  | 71.34±0.64 | 25.7±0.26    | 0.722325099 |
+| QNLP Beta 2/3   | bert-base-uncased | 8    | 67.79±0.02 | 66.64±0.75 | 65.81±2.9  | 1093.24±16.7 | 0.67794301  |
+| Classical FFNN | ember-v1          | 5    | 82.66±0.05 | 82.26±0.48 | 82.06±0.93 | 25.93±0.23   | 0.82660868  |
+| QNLP Beta 2/3   | ember-v1          | 5    | 80.3±0.03  | 79.34±1    | 78.28±3.34 | 1102.83±8.08 | 0.802986657 |
+| Classical FFNN | fasttext          | 5    | 64.4±0.06  | 63.62±0.59 | 63.42±0.74 | 25.47±0.22   | 0.643961219 |
+| Classical FFNN | bert-base-uncased | 5    | 62.02±0.06 | 60.67±0.59 | 60.34±0.8  | 25.67±0.39   | 0.620233202 |
+| QNLP Beta 2/3   | fasttext          | 5    | 58.97±0.27 | 56.6±3.19  | 55.37±4.19 | 1105.26±6.15 | 0.589733757 |
+| QNLP Beta 2/3   | bert-base-uncased | 5    | 58.22±0.07 | 56.83±0.65 | 55.7±2.27  | 1095.56±4.69 | 0.582223469 |
+| Classical FFNN | ember-v1          | 3    | 81.36±0.05 | 81.12±0.67 | 80.92±0.99 | 25.81±0.22   | 0.813611418 |
+| QNLP Beta 2/3   | ember-v1          | 3    | 79.59±0.05 | 79.21±0.51 | 78.16±3.03 | 1208.52±7.8  | 0.795891009 |
+| Classical FFNN | fasttext          | 3    | 53.9±0.1   | 53.43±0.29 | 53.33±0.42 | 26.11±0.24   | 0.538954357 |
+| QNLP Beta 2/3   | fasttext          | 3    | 49.65±0.22 | 47.38±1.49 | 46.62±2.79 | 1182.23±3.1  | 0.496470882 |
+| Classical FFNN | bert-base-uncased | 3    | 44.62±0.07 | 44.45±0.36 | 44.27±0.49 | 25.44±0.6    | 0.446237061 |
+| QNLP Beta 2/3   | bert-base-uncased | 3    | 43.48±0.06 | 42.58±0.24 | 42.39±1.34 | 994.81±60.4  | 0.434829779 |
+
+### amazon-reviews
+
+The test set consisted of 39718 examples featuring 2 classes.
+
+| Model          | Embedding model   | Dimensionality | Test mean ± CI | Dev mean ± CI | Train mean ± CI | Seconds per model ± CI |
+| -------------- | ----------------- | -------------- | -------------- | ------------- | --------------- | ---------------------- |
+| Classical FFNN | ember-v1          | full | 87.56±0.03 | 87.55±0.09 | 87.5±0.26  | 21.78±1.19     | 0.875551207 |
+| Classical FFNN | bert-base-uncased | full | 81.99±0.05 | 82.27±0.09 | 82.71±0.21 | 41.82±5.51     | 0.819895542 |
+| Classical FFNN | fasttext          | full | 80.6±0.04  | 80.33±0.09 | 80.36±0.15 | 84.23±2.1      | 0.805976301 |
+| Classical FFNN | ember-v1          | 8    | 86.77±0.01 | 86.97±0.02 | 86.49±0.16 | 66.56±3.04     | 0.867651105 |
+| QNLP Beta 2/3   | ember-v1          | 8    | 86.27±0.01 | 86.4±0.06  | 85.99±0.12 | 4106.68±20.83  | 0.862725548 |
+| Classical FFNN | bert-base-uncased | 8    | 73.88±0.03 | 74.09±0.05 | 73.71±0.28 | 63.64±4.04     | 0.73875321  |
+| QNLP Beta 2/3   | bert-base-uncased | 8    | 72.88±0.02 | 72.52±0.31 | 72.15±0.65 | 2357.72±24.04  | 0.728825721 |
+| Classical FFNN | fasttext          | 8    | 71.35±0.03 | 71.28±0.09 | 71.02±0.18 | 67.96±0.18     | 0.713464932 |
+| QNLP Beta 2/3   | fasttext          | 8    | 70.55±0.04 | 70.16±0.33 | 69.52±1.02 | 2557.94±154.83 | 0.705510516 |
+| Classical FFNN | ember-v1          | 5    | 86.68±0.01 | 86.9±0.02  | 86.41±0.06 | 64.66±3.7      | 0.86678584  |
+| QNLP Beta 2/3   | ember-v1          | 5    | 86.3±0.02  | 86.43±0.07 | 85.99±0.12 | 4063.31±19.98  | 0.863024321 |
+| Classical FFNN | fasttext          | 5    | 68.28±0.02 | 68.13±0.06 | 67.87±0.13 | 67.23±1.97     | 0.68284741  |
+| QNLP Beta 2/3   | fasttext          | 5    | 68.05±0.05 | 67.55±0.26 | 66.94±0.82 | 2567.51±174.82 | 0.680547862 |
+| Classical FFNN | bert-base-uncased | 5    | 62.33±0.04 | 62.41±0.05 | 62.13±0.09 | 65.64±2.55     | 0.62332024  |
+| QNLP Beta 2/3   | bert-base-uncased | 5    | 61.58±0.04 | 61.09±0.23 | 60.92±0.3  | 2352.16±4.92   | 0.615848398 |
+| Classical FFNN | ember-v1          | 3    | 86.65±0.01 | 86.76±0.02 | 86.28±0.12 | 54.39±6.21     | 0.866485393 |
+| QNLP Beta 2/3   | ember-v1          | 3    | 86.29±0.01 | 86.45±0.08 | 86.03±0.08 | 4318.78±121.79 | 0.862907666 |
+| Classical FFNN | fasttext          | 3    | 58.08±0.02 | 58.28±0.01 | 58.25±0.02 | 47.88±6.86     | 0.58076187  |
+| QNLP Beta 2/3   | fasttext          | 3    | 57.83±0.03 | 58.06±0.09 | 57.99±0.1  | 2684.3±43.47   | 0.578297833 |
+| Classical FFNN | bert-base-uncased | 3    | 57.74±0.06 | 58.04±0.05 | 57.41±0.04 | 33.26±5.22     | 0.577430884 |
+| QNLP Beta 2/3   | bert-base-uncased | 3    | 57.32±0.04 | 57.05±0.11 | 56.48±0.18 | 2394.51±121.78 | 0.573151552 |
 
 *This project has received funding from the European Union’s Horizon
 2020 research and innovation programme under grant agreement No 951821.*
