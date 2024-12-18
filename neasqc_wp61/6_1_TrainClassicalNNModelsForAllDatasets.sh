@@ -7,8 +7,8 @@ models=(
     ["fasttext"]="fasttext"
 )
 
-datasets=("labelled_newscatcher_dataset_tok_balanced" "amazon-fine-food-reviews_tok_balanced" "ag_news_tok_balanced" "food-com-recipes-user-interactions_tok_balanced" "huffpost-news_tok_balanced") # "amazon-reviews_tok_balanced"
-dims=("")
+datasets=("labelled_newscatcher_dataset_tok_balanced" "amazon-fine-food-reviews_tok_balanced" "ag_news_tok_balanced" "food-com-recipes-user-interactions_tok_balanced" "huffpost-news_tok_balanced" "amazon-reviews_tok_balanced")
+dims=("_3" "_5" "_8")
 input_dir="./data/datasets"
 output_dir="./benchmarking/results/raw/classical"
 sanitize_model_name() {
