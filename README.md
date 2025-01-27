@@ -8,7 +8,7 @@ This readme gives a brief introduction to the release candidate of the [NEASQC](
 * Evaluate the trained models on held-out test sets.
 
 We give a brief overview of the following models:
-* Quantum models Beta2/3 (for Alpha3, refer to the [previous deliverable](https://www.neasqc.eu/wp-content/uploads/2023/11/NEASQC_D6_10_QNLP.pdf) and the experimental implementation [here](https://github.com/NEASQC/WP6_QNLP/tree/27f289bb50dfb9c82e5de12e2164bfad96d24b84)).
+* Quantum models Beta2/3 (for Alpha3, refer to the [previous deliverable](https://www.neasqc.eu/wp-content/uploads/2023/11/NEASQC_D6_10_QNLP.pdf) and the experimental implementation [here](https://github.com/NEASQC/WP6_QNLP/tree/qnlp_models_d6_13)).
 * Classical NLP models. Although, we have experimented with neural network models trained on top of pre-trained word-level (using convolutional neural networks) and sentence-level (using a feed-forward neural network) embeddings as well as a scenario without pre-trained embeddings (using a long short-term memory neural network) (see experimental results [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/v2-classical-nlp-models/neasqc_wp61/doc) and [here](https://github.com/tilde-nlp/neasqc_wp6_qnlp/tree/classical-nlp-models/neasqc_wp61/doc)), in the release candidate, we focused only on sentence-level pretrained embeddings that showed to achieve better results.
 
 ## Setup
